@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>My custom 25 gig router/firewall build (2025)</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1 id="mycustom25gigrouterbuild">My custom 25 gig router/firewall build (2025)</h1>
+
+
+    My current internet connection at home is 1 Gbit/s symmetric up/down
+    on fiber for about CHF 65.-/month. But my ISP also offers 10 Gbit/s
+    and even 25 Gbit/s on the same line <b><i>for the same price</i></b>!
+    I'd merely have to invest in different optics and pay a one-off
+    setup fee. For an extremely nerdy, data-hungry household like ours
+    that's a no-brainer, right? Only problem is that my current firewall
+    (Zyxel ZyWALL 110) only manages up to 1 Gbit/s and has been
+    end-of-life since late 2022. Also, the LAN side is currently only
+    set up for 1 Gbit/s (switches, Cat 5e wiring) - that will have to be
+    upgraded eventually, as 10 gig consumer gear becomes more readily
+    available, but that's a story for another time...<br>
+    <br>
+    Looking at the current market for 25 gig capable, off-the-shelf
+    router/firewall hardware, it quickly becomes clear that there are
+    very few affordable options. There are some economically priced
+    options from budget brands like Mikrotik or Ubiquiti, but the fact
+    that they feature 25 Gbit/s interfaces (SFP28 fiber optics) does not
+    imply that their CPUs can effectively handle 25 Gbit/s throughput,
+    especially with more complex traffic like SSL VPN.<br>
+    <br>
+    Encouraged by others who have been in the same spot (like <a class="moz-txt-link-freetext" href="https://michael.stapelberg.ch/posts/2021-07-10-linux-25gbit-internet-router-pc-build/">https://michael.stapelberg.ch/posts/2021-07-10-linux-25gbit-internet-router-pc-build/</a>
+    or <a class="moz-txt-link-freetext" href="https://sschueller.github.io/posts/wiring-a-home-with-fiber/#router">https://sschueller.github.io/posts/wiring-a-home-with-fiber/#router</a>)
+    I decided to build my own custom router/firewall from standard PC
+    parts.<br>
+    <br>
+    My initial goals and constraints:<br>
+    <ul>
+      <li>effectively handle 25 Gbit/s traffic (at least for NAT
+        routing), and aim for VPN throughput as high as reasonably
+        possible</li>
+      <li>low energy consumption (this router will run 24/7 and should
+        therefore use as little power as possible)</li>
+      <li>use standard PC hardware on a budget (not the cheapest, but
+        not overly expensive either)</li>
+      <li>well-established, open-source operating system</li>
+      <li>SSL VPN access to home network</li>
+    </ul>
+    <br>
+    <h3>Software picks</h3>
+    <h4> OS</h4>
+    Coming from the comfortable admin GUI of my previous firewall, I had
+    initially set my sight on OpnSense community edition (<a class="moz-txt-link-freetext" href="https://opnsense.org/">https://opnsense.org/</a>).
+    I'm not a networking pro, so I figured I'd have the best chance to
+    "get it right" by having a web GUI guide me through networking OS
+    setup and configuration. However, after talking to others with
+    OpnSense experience, I learned that it might not be the best choice
+    for a high-throughput router/firewall OS. Based on FreeBSD, it
+    appears to have scalability limitations which may prevent me from
+    reaching my 25 gig target. The makers of the commercial equivalent,
+    pfSense (<a class="moz-txt-link-freetext" href="https://pfsense.org/">https://pfsense.org/</a>), have
+    apparently implemented custom tuning tweaks to improve on that, but
+    these are of course not available in the OpnSense community
+    editions. I haven't ruled out OpnSense completely and may come back
+    to it some day, but for now I'll go a different path.<br>
+    <br>
+    Based on various recommendations I then looked int VyOS (<a class="moz-txt-link-freetext" href="https://vyos.io/">https://vyos.io/</a>).
+    They also have commercial subscriptions as well as freely available
+    "nightly builds" (<a class="moz-txt-link-freetext" href="https://vyos.net/get/nightly-builds/">https://vyos.net/get/nightly-builds/</a>).
+    Nightly builds are a bit of a risk (and would be a definite no-go in
+    a professional setup), but I guess in my context I can justify it.
+    There is no established (web) GUI for VyOS (although there
+    apparently have been some projects attempting that). It's command
+    line only, which I am totally fine with. I'm a software developer
+    and DevOps engineer by trade, so that's my daily bread and butter,
+    and I am also a big supporter of "configuration as code" which is
+    how VyOS externalizes their instance setup. I'm just a bit doubtful
+    whether my networking skills will suffice to construct a full-blown
+    and secure home router/firewall from scratch. So I guess there will
+    be a lot of learning on the way, but that is also part of the fun
+    and motivation of this project.<br>
+    <br>
+    I see a lot of public interest in VyOS lately, so I guess I'm not
+    totally off the track. For example, I'm following Tomaž Zaman on
+    YouTube
+    (<a class="moz-txt-link-freetext" href="https://www.youtube.com/playlist?list=PLmSwDz13rIwLkLphPI7xmUSD4DqdkFBKp">https://www.youtube.com/playlist?list=PLmSwDz13rIwLkLphPI7xmUSD4DqdkFBKp</a>),
+    he is apparently also considering VyOS for his router project now.
+    However, the makers of VyOS have been criticized lately by the
+    community for their licensing decisions: VyOS is no longer open
+    source in the classic sense (e.g. LTS releases are closed source),
+    and that may not bode well for the future... But alas, rolling VyOS
+    releases is what I'll go with for now.<br>
+    <br>
+    <h4> Virtualization</h4>
+    I'm normally a huge fan of virtualization (for flexibility and ease
+    of operation), but in this case networking performance is one of the
+    primary goals, so I stayed away from a hypervisor to make sure I
+    have the full potential of handing off package processing load from
+    the CPU to the bare metal network card. So, no Proxmox (<a class="moz-txt-link-freetext" href="https://www.proxmox.com">https://www.proxmox.com</a>)
+    or similar for now.<br>
+    <br>
+    <br>
+    <h3> The long wait for hardware</h3>
+    <h4> CPU</h4>
+    The market for low-power CPUs has been exploding, driven by
+    smartphone, tablet and data-center demand for powerful, yet
+    low-power hardware, and by Apple's progress with their own ARM-based
+    silicon. However, due to my software pick (see above) I was limited
+    to x64 architecture CPUs. Since (some) AMD CPUs are known for their
+    outstanding energy efficiency, I focused on AMD Ryzen processors,
+    particularly the 35W TDP models, and preferably those with an
+    integrated GPU (to avoid the power draw of a superfluous graphics
+    card). I knew there was a "5700GE" in the Ryzen 7 (5000) series, but
+    that was already a couple of years old (announced April 2021). I
+    would rather start with a more recent CPU, but AMD never came out
+    with any 35 W Ryzen 7 for the newer 7000 series. Finally, in April
+    2024 AMD announced the Ryzen Pro 8700GE (35W TDP) which fits the
+    bill
+    (<a class="moz-txt-link-freetext" href="https://www.amd.com/en/products/processors/desktops/ryzen-pro/8000-series/amd-ryzen-7-pro-8700ge.html">https://www.amd.com/en/products/processors/desktops/ryzen-pro/8000-series/amd-ryzen-7-pro-8700ge.html</a>).
+    The only problem was that this CPU is not a "consumer" product, but
+    primarily targeted at OEMs, like the new Lenovo ThinkCentre M75q Gen
+    5 Tiny
+    (<a class="moz-txt-link-freetext" href="https://www.lenovo.com/us/en/p/desktops/thinkcentre/m-series-tiny/lenovo-thinkcentre-m75q-gen-5-tiny-amd/len102c0051">https://www.lenovo.com/us/en/p/desktops/thinkcentre/m-series-tiny/lenovo-thinkcentre-m75q-gen-5-tiny-amd/len102c0051</a>),
+    or the new Hetzner cloud server AX42 (<a class="moz-txt-link-freetext" href="https://www.hetzner.com/dedicated-rootserver/ax42/">https://www.hetzner.com/dedicated-rootserver/ax42/</a>).
+    Consequently, this CPU was virtually unavailable on the end-user
+    market. European distributors were delaying their "back in stock"
+    prediction week by week. Engineering samples started showing up on
+    Ebay, but those were obviously pre-production and crazy expensive.
+    When in August 2024 one Ebay seller in China started offering "used"
+    Ryzen Pro 8700GE CPUs for USD 440.- I had run out of patience and
+    ventured the risk. I received a brand new legit AMD CPU, fully
+    operational, no issues so far.<br>
+    <br>
+    <h4>Case/Motherboard</h4>
+    At the same time I needed to find a suitable motherboard and case.
+    Asrock had just announced their DeskMeet X600 Series (<a class="moz-txt-link-freetext" href="https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/index.asp">https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/index.asp</a>)
+    barebone:<br>
+    <ul>
+      <li>small size case (8l)</li>
+      <li>modest 500W power supply included<br>
+      </li>
+      <li>AMD socket AM5 (for Ryzen 9000/8000/7000 series CPUs)</li>
+      <li>4 DIMM slots&nbsp; for up to 256 GB DDR5 memory, ECC capable (!)</li>
+      <li>M.2 Socket (type 2280) PCIe Gen5x4 (up to 128 Gb/s)</li>
+      <li>PCIe 4.0 x 16 slot for fast ethernet network adapter (this
+        slot is actually meant to host a discrete, dual slot wide
+        graphics card which I don't need, as graphics are provided by
+        the CPU)</li>
+    </ul>
+    <p><br>
+    </p>
+    <h4> Network Card</h4>
+    Having a fast, modern PCIe 4.0 x 16 slot available is an essential
+    requirement for running a discrete ethernet network card to take on
+    the bulk routing load at up to 25 Gbit/s (the on-board 2.5 Gbit/s
+    network port is only used for server management).<br>
+    There are various vendors offering network cards with 2x or 4x SFP28
+    ports. In the end, I decided for a genuine (i.e. non-rebranded)
+    Intel
+    E810-XXVDA2&nbsp;(<a class="moz-txt-link-freetext" href="https://ark.intel.com/content/www/us/en/ark/products/189760/intel-ethernet-network-adapter-e810-xxvda2.html">https://ark.intel.com/content/www/us/en/ark/products/189760/intel-ethernet-network-adapter-e810-xxvda2.html</a>)<br>
+    which appears to be well supported by Linux kernel drivers and
+    allows to offload various types of packet processing. It has 2 SFP28
+    ports for up to 25 Gbit/s each. There is also a E810-XXVDA<b>4</b>
+    model by Intel
+    (<a class="moz-txt-link-freetext" href="https://ark.intel.com/content/www/us/en/ark/products/192560/intel-ethernet-network-adapter-e810-xxvda4.html">https://ark.intel.com/content/www/us/en/ark/products/192560/intel-ethernet-network-adapter-e810-xxvda4.html</a>)
+    with 4 SFP28 ports, but that is twice the price and only makes sense
+    if the local network is actually 25 gig capable (using 3 internal 25
+    gig ports).<br>
+    <br>
+    <h4>Memory</h4>
+    Since the chosen motherboard supports ECC memory, I decided to give
+    it a try. I'm not sure yet whether it's a good choice for a
+    router/firewall application, but I kind of liked the potential
+    "peace of mind" that comes with automatic error correction on a 24/7
+    server, hoping for less required troubleshooting and maintenance
+    work. From previous PC builds I had positive experiences with
+    Crucial memory (a Micron brand), so I looked for fast but affordable
+    ECC DIMMs of that brand. I purchased two Micron 32GB DDR5-5600 ECC
+    UDIMM 2Rx8 CL46 sticks (<a class="moz-txt-link-freetext" href="https://www.crucial.de/memory/ddr5/mtc20c2085s1ec56br">https://www.crucial.de/memory/ddr5/mtc20c2085s1ec56br</a>)
+    directly from their web shop at crucial.com. 64 GB should be plenty
+    of memory for a router/firewall machine, with enough leeway for
+    running additional services on the same machine. With only 2 of the
+    4 memory slots populated, there is also room for further expansion
+    to a maximum of 128 GB (or even 256 GB if one is willing to replace
+    the existing memory with 64 GB sticks). Crucial memory is not listed
+    on Asrock's QVL
+    (<a class="moz-txt-link-freetext" href="https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/index.asp#Memory">https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/index.asp#Memory</a>)
+    but the parametric search on Crucial's web site
+    (<a class="moz-txt-link-freetext" href="https://www.crucial.com/compatible-upgrade-for/asrock/deskmeet-x600-series">https://www.crucial.com/compatible-upgrade-for/asrock/deskmeet-x600-series</a>)
+    reports these modules as compatible.<br>
+    <br>
+    <h4>Storage</h4>
+    I reckon storage speed and capacity are not overly important for a
+    router/firewall. Nevertheless, I picked a good quality, fast and big
+    enough M.2 SSD (Samsung 990 PRO NVMe M.2 4.0TB w/o Heat Sink,
+    MZ-V9P4T0BW) that will hopefully work smoothly for many years of
+    uneventful operation. I didn't opt for a heat spreader; my hope is
+    that case and CPU fans can easily keep in-case temperature low
+    enough for the SSD, given that it won't have to endure persisting
+    high load anyway.<br>
+    <br>
+    <br>
+    <h4>CPU Cooler</h4>
+    Given the tight space in such a small case, only a very low profile
+    CPU cooler will fit. I chose the Noctua NH-L9a-AM5 (<a class="moz-txt-link-freetext" href="https://noctua.at/en/nh-l9a-am5">https://noctua.at/en/nh-l9a-am5</a>)
+    from Asrock's QVL
+    (<a class="moz-txt-link-freetext" href="https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/index.asp#CPUCoolerList">https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/index.asp#CPUCoolerList</a>).
+    It is rated for up to NSPR 61, so it should easily handle the CPU's
+    TDP of 35W.<br>
+    <br>
+    <br>
+    <h4>LAN Switch and 10 gig DAC</h4>
+    To interface with the existing LAN side, I needed a new switch with
+    at least one 10 Gbit/s SFP+ port. I picked an inexpensive model from
+    Mikrotik with two SFP+ ports and eight 2.5 Gbit/s ethernet ports
+    (Mikrotik CRS310-8G+2S+IN, <a class="moz-txt-link-freetext" href="https://mikrotik.com/product/crs310_8g_2s_in">https://mikrotik.com/product/crs310_8g_2s_in</a>).
+    If this project turns out to be successful and I actually reach a
+    full 25 Gbit/s throughput, I can continue and upgrade my LAN
+    infrastructure to 10/25 Gbit/s and will be able to reuse this device
+    as a secondary switch in one of the other rooms connected via fiber
+    link. The switch is not really quiet, though (louder than the actual
+    router/firewall). Not a problem in my case, as it sits behind closed
+    doors in separate room, but you wouldn't want it in your living
+    room. <br>
+    For connecting the switch to the router's Intel NIC, I chose a
+    universal 1G/10G/25G SFP/SFP+/SFP28 DAC from Mikrotik (XS+DA0003, <a class="moz-txt-link-freetext" href="https://mikrotik.com/product/xs_da0003">https://mikrotik.com/product/xs_da0003</a>)
+    which may be reused later to connect the router to a 25 Gbit/s SFP28
+    switch port.<br>
+    <br>
+    <br>
+    <br>
+    <h3>Going live<br>
+    </h3>
+    Upgrading my 1 Gbit/s symmetric up/down fiber connection with my
+    provider was quick and easy. On Sunday, 02 Feb 2025 I ordered the
+    upgrade online and received the replacement transceiver on Wednesday
+    05 Feb
+(<a class="moz-txt-link-freetext" href="https://www.flexoptix.net/de/p-b1625g-10-adi.html?option875=1&amp;selectedCompatibility=346132&amp;compatibilityOptionId=20851&amp;selectedVendor=MSA+Standard+%28Default%29">https://www.flexoptix.net/de/p-b1625g-10-adi.html?option875=1&amp;selectedCompatibility=346132&amp;compatibilityOptionId=20851&amp;selectedVendor=MSA+Standard+%28Default%29</a>).
+    AFAIK my ISP sources their fiber optics from Flexoptix, so I had
+    inquired with their support in advance whether there's an
+    Intel-specific configuration available for that transceiver, and
+    they replied that they had an "Intel - E25GSFP28LR" configuration
+    available via programming through their "Flexbox"
+    (<a class="moz-txt-link-freetext" href="https://www.flexoptix.net/de/flexbox.html">https://www.flexoptix.net/de/flexbox.html</a>). I passed that info on
+    to my ISP and I guess they programmed it accordingly.<br>
+    <br>
+    On Monday 10 Feb 2025 around noon time my ISP performed the actual
+    upgrade on their side. They had advised me that once I noticed an
+    interruption of my internet connection I would have to switch to the
+    25 gbit hardware. I was able to hot swap the transceivers without
+    even rebooting my VyOS router and after a couple of seconds I was
+    back online - with 25 Gbit/s symmetric up/down!<br>
+    <br>
+    <h4>First results<br>
+    </h4>
+    Of course I immediately had to run an Ookla speedtest to check how
+    much throughput I actually get out my setup - and was not
+    disappointed!<br>
+    Disclaimer: I had to run the speed test via the CLI on my VyOS box
+    itself, as my LAN infrastructure is not ready yet for more than
+    1gbit.<br>
+    I checked 2 different Init7 target servers and consistently got &gt;
+    23'000 Mbps both up and down, and observed very little CPU load. I'm
+    happy with that and confident that future tests from other
+    machines in the LAN will show similar results.<br>
+    <br>
+    Here are the details:<br>
+    <br>
+    <pre><code>vyosadmin@myvyosbox:/config/user-data/ookla-speedtest-1.2.0-linux-x86_64$ <b>./speedtest -s 50092 &amp;&amp; ./speedtest -s 43030</b>
+&nbsp;&nbsp; Speedtest by Ookla
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Server: Michael Stapelberg - Zurich (id: 50092)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ISP: Init7
+Idle Latency:&nbsp;&nbsp;&nbsp;&nbsp; 1.07 ms&nbsp;&nbsp; (jitter: 0.19ms, low: 1.00ms, high: 1.42ms)
+&nbsp;&nbsp;&nbsp;<font color="#ff0000"> <b>Download: 23481.01 Mbps (data used: 10.9 GB)</b></font>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.17 ms&nbsp;&nbsp; (jitter: 0.25ms, low: 0.89ms, high: 3.43ms)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000"><b> Upload: 23466.50 Mbps (data used: 10.6 GB)</b></font>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.93 ms&nbsp;&nbsp; (jitter: 0.02ms, low: 0.88ms, high: 0.97ms)
+&nbsp;Packet Loss:&nbsp;&nbsp;&nbsp;&nbsp; 0.0%
+&nbsp; Result URL: https://www.speedtest.net/result/c/...
+&nbsp;&nbsp; Speedtest by Ookla
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Server: Init7 AG - Winterthur (id: 43030)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ISP: Init7
+Idle Latency:&nbsp;&nbsp;&nbsp;&nbsp; 1.90 ms&nbsp;&nbsp; (jitter: 0.04ms, low: 1.85ms, high: 2.00ms)
+&nbsp;&nbsp;&nbsp;<b> <font color="#ff0000">Download: 23393.56 Mbps (data used: 22.9 GB)</font></b>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.53 ms&nbsp;&nbsp; (jitter: 3.76ms, low: 1.25ms, high: 24.88ms)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#ff0000"><b>Upload: 22390.63 Mbps (data used: 19.8 GB)</b></font>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.48 ms&nbsp;&nbsp; (jitter: 3.31ms, low: 1.27ms, high: 212.42ms)
+&nbsp;Packet Loss:&nbsp;&nbsp;&nbsp;&nbsp; 0.0%
+&nbsp; Result URL: https://www.speedtest.net/result/c/</code><code>...</code>
+</pre>
+    CPU load is basically zero, apart from 30-90% of 1 CPU core for the
+    speedtest executable itself. And that is with NAT routing and
+    firewall rules fully enabled, IGMP multicast configured for IPTV
+    (plus some other services and podman containers running like
+    destination NAT, OpenConnect SSL VPN, ntopng etc.)<br>
+    <br>
+
+    <br>
+    <h3>Component List<br>
+    </h3>
+    <br>
+    <table cellpadding="2" cellspacing="2" border="1" width="100%">
+      <tbody>
+        <tr>
+          <td valign="top" width="20%">motherboard/case/power supply<br>
+          </td>
+          <td valign="top" width="25%">Asrock DeskMeet X600 <br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.asrock.com/nettop/AMD/DeskMeet X600 Series" moz-do-not-send="true">https://www.asrock.com/nettop/AMD/DeskMeet X600 Series</a>
+            <br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.digitec.ch/de/s1/product/asrock-deskmeet-x600-barebone-44734064" moz-do-not-send="true">https://www.digitec.ch/de/s1/product/asrock-deskmeet-x600-barebone-44734064</a><br>
+          </td>
+          <td valign="top" width="8%">CHF 209.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">CPU<br>
+          </td>
+          <td valign="top" width="25%">AMD Ryzen 7 PRO 8700GE<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.amd.com/en/products/processors/desktops/ryzen-pro/8000-series/amd-ryzen-7-pro-8700ge.html" moz-do-not-send="true">https://www.amd.com/en/products/processors/desktops/ryzen-pro/8000-series/amd-ryzen-7-pro-8700ge.html</a><br>
+          </td>
+          <td valign="top" width="20%">E**y<br>
+          </td>
+          <td valign="top" width="8%">USD 445.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">memory (64 GB, 2 modules, ECC)<br>
+          </td>
+          <td valign="top" width="25%">Micron 32GB DDR5-5600 ECC UDIMM
+            2Rx8 CL46<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.crucial.de/memory/ddr5/mtc20c2085s1ec56br" moz-do-not-send="true">https://www.crucial.de/memory/ddr5/mtc20c2085s1ec56br</a><br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.crucial.de/memory/ddr5/mtc20c2085s1ec56br" moz-do-not-send="true">https://www.crucial.de/memory/ddr5/mtc20c2085s1ec56br</a><br>
+          </td>
+          <td valign="top" width="8%">EUR 291.98<br>
+            +<br>
+            CHF 48.40<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">SSD<br>
+          </td>
+          <td valign="top" width="25%">Samsung 990 PRO NVMe M.2 4.0TB
+            w/o Heat Sink (MZ-V9P4T0BW)<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/#Storage" moz-do-not-send="true">https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/#Storage</a><br>
+          </td>
+          <td valign="top" width="20%">A****n<br>
+          </td>
+          <td valign="top" width="8%">EUR 278.87<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">CPU cooler<br>
+          </td>
+          <td valign="top" width="25%">Noctua NH-L9a-AM5<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/#CPUCoolerList" moz-do-not-send="true">https://www.asrock.com/nettop/AMD/DeskMeet%20X600%20Series/#CPUCoolerList</a><br>
+          </td>
+          <td valign="top" width="20%">A****n</td>
+          <td valign="top" width="8%">EUR 41.93<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">network adapter (2 25G ports)<br>
+          </td>
+          <td valign="top" width="25%">Intel SFP28 E810-XXVDA2
+            PCI-Express x8<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.intel.com/content/www/us/en/products/sku/189760/intel-ethernet-network-adapter-e810xxvda2/specifications.html" moz-do-not-send="true">https://www.intel.com/content/www/us/en/products/sku/189760/intel-ethernet-network-adapter-e810xxvda2/specifications.html</a><br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.brack.ch/intel-sfp28-netzwerkkarte-e810-xxvda2-pci-express-x8-1190083" moz-do-not-send="true">https://www.brack.ch/intel-sfp28-netzwerkkarte-e810-xxvda2-pci-express-x8-1190083</a><br>
+          </td>
+          <td valign="top" width="8%">CHF 259.00<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1" colspan="4" align="right" width="20%">total ca. <br>
+          </td>
+          <td valign="top" width="8%">CHF 1503.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="25%"><br>
+          </td>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="8%"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">switch 8x 1G + 2x SFP+</td>
+          <td valign="top" width="25%">Mikrotik CRS310-8G+2S+IN 10
+            Port</td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/crs310_8g_2s_in" moz-do-not-send="true">https://mikrotik.com/product/crs310_8g_2s_in</a><br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.brack.ch/mikrotik-switch-crs310-8g-plus-2s-plus-in-10-port-1611832" moz-do-not-send="true">https://www.brack.ch/mikrotik-switch-crs310-8g-plus-2s-plus-in-10-port-1611832</a></td>
+          <td valign="top" width="8%">CHF 204.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">DAC SFP 1G, SFP+ 10G, and 25G
+            SFP28 3m<br>
+          </td>
+          <td valign="top" width="25%">Mikrotik XS+DA0003<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/xs_da0003" moz-do-not-send="true">https://mikrotik.com/product/xs_da0003</a><br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.brack.ch/mikrotik-direct-attach-kabel-xs-plus-da0003-sfp-plus--sfp28-sfp-plus--sfp28-3-m-1152490" moz-do-not-send="true">https://www.brack.ch/mikrotik-direct-attach-kabel-xs-plus-da0003-sfp-plus--sfp28-sfp-plus--sfp28-3-m-1152490</a><br>
+          </td>
+          <td valign="top" width="8%">CHF 34.80<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+
+    <h3>Future plans<br>
+    </h3>
+    As said before, I have decided against virtualization for now, as my
+    primary focus was on actually reaching 25gbit throughput. But seeing
+    that CPU load is very low, the platform could handle much more load
+    (for hosting some services), so perhaps I'll reconsider and run
+    Proxmox on the same setup in the future. <br>
+    <br>
+    But my first task will be upgrading my LAN infrastructure to &gt;1
+    gbit. I'll start with some machines in close vicinity to the VyOS
+    box, mainly my Synology boxes. My copper LAN wiring should also be
+    good for 2.5/10 gbit, at least for short distances, so I will
+    upgrade some PCs to at least 2.5 gbit. And my primary workstation (9
+    years old!) is overdue for replacement, so when that happens I'll go
+    with 25 gbit right from the start and pull in a single mode fiber
+    line to my home office.<br>
+    <br>
+  
+     
+  </div>
+    
+
+
+</body>
+</html>
