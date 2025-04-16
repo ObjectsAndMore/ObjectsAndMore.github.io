@@ -22,10 +22,12 @@
     only), it has held steady and served me well over all these years.
     <br>
     <br>
-    But since I have recently bumped my internet access to 25 Gbit/s
-    (see <a class="moz-txt-link-freetext" href="25gigRouterBuild.html">https://objectsandmore.github.io/25gigRouterBuild.html/</a>)
-    and started to upgrade my 1 Gbit/s LAN infrastructure to 2.5/10/25 Gbit/s, this machine seems
-    to have fallen out of time. After all, it only has a PCIe Gen2 bus, and there is simply no way
+    But then so many new technologies have evolved over the years, like PCIe 5.0, DDR5, USB4 Type-C,
+    Thunderbolt 4, that my old machine seems to have fallen out of time. Also, since I have recently
+    bumped my internet access to 25 Gbit/s (see
+    <a class="moz-txt-link-freetext" href="25gigRouterBuild.html">https://objectsandmore.github.io/25gigRouterBuild.html/</a>)
+    and started to upgrade my 1 Gbit/s LAN infrastructure to 2.5/10/25 Gbit/s, this machine cannot even make use of the 
+    full network bandwidth. After all, it only has a PCIe Gen2 bus, and there is simply no way
     I would get a modern 10/25 Gbit/s ethernet adapter (typically PCIe Gen4 or even 5) to work in it.
     It would also not be upgradable to Windows 11 (yes, I'm actually running Windows on my PC - I'm
     content with running Linux in a VirtualBox VM &#x1F609;), so the end of Windows 10 support later
@@ -62,6 +64,65 @@
       <li>PCIe 4.0/5.0 SFP28 25 Gbit/s network adapter</li>
     </ul>
 
+    <br>
+    <h3>Design Choices<br>
+    </h3>
+    <h4> Motherboard</h4>
+    The top-of-the-line chipsets for the AMD AM5 socket are currently X870 and X870E. Both would
+    in fact work for my purposes, with the latter providing more general-purpose PCIe lanes. So, in order
+    to have more PCIe "headroom" for other (storage, USB, ...) peripherals (besides the lanes already
+    taken by a high-end GPU and a 25 Gbit/s NIC) without lane sharing, I chose to go with the X870E chipset. All
+    major motherboard vendors (Asrock, Asus, Gigabyte, MSI) offer AM5 motherboards with that chipset. I picked the MSI MAG X870E
+    TOMAHAWK WIFI because of its well-balanced PCIe layout and some features other competitors are lacking,
+    like the two-digit hex debug LED on the board which might come in handy when troubleshooting problems during POST. It also
+    has an enormous range of connectivity options on the backplane.
+    Besides the primary PCIe 5.0 slot for that GPU, there is also a x4 PCIe 4.0 slot which I will need for the NIC (as well
+    as another PCIe 3.0 x1 slot for which I have no current plans).
+
+    <h4> Motherboard</h4>
+    The AMD Ryzen™ 9 9950X CPU has been announced in August 2024; only the X3D variants are more recent. It has 28 fast
+    PCIe 5.0 lanes, 4 of which are dedicated to the chipset. It has 16 cores (32 threads) and a base/boost clock of 4.3/5.7 GHz.
+    That should be plenty of power and hold up well for a couple of years. AMD's flagship CPU, the 9950X3D, would have double
+    the L3 cache size, but is apparently prone to thermal damage and also hard to get currently.
+
+    <h4> Memory</h4>
+    Micron/Crucial is one of the first vendors offering 64 GB DDR5 memory modules (that are actually available for purchase).
+    With 4 RAM slots available on the motherboard, a total of 256 GB RAM would be possible. It is unclear whether populating all 
+    four slots would reduce memory performance, so in the beginning I will only use 2 modules for a total of 128 GB. I do not
+    plan on overclocking the RAM, as stability is my highest priority.
+
+    <h4> SSD</h4>
+    I have been waiting for Samsung to come out with a native PCIe 5.0 SSD for a long time now, and finally in March 2025
+    Samsung finally announced the 9100 PRO Series SSDs with 1/2/4 TB of storage capacity and with or without heatsink.
+    I opted for the model MZ-V9P4T0BW with 4 TB and w/o heatsink, as there is already a beefy heatsink provided on the 
+    primary PCI 5.0 M.2 slot on the motherboard. They claim sequential read/write speed up to 14'800/13'400 MB/s and up
+    to 2'200/2'600 random read/write KIOPS. Also, the controller supposedly stays relatively cool (compared to the competition).
+
+    <h4> CPU cooler</h4>
+    The NH-D15 G2 LBC is Noctua's highest ranking AM5 compatible CPU cooler in terms of "Noctua’s Standardised Performance Rating",
+    with an NSPR of 228, so I reckon it should be able to deal with the CPU's thermal output. The "LBC" model is specifically
+    designed for AM5. They claim that the specialized Low Base Convexity (LBC) contact plate provides excellent thermal
+    conductivity on AMD’s AM5 processors, avoiding the need to mount the cooler in an offset position. There are 2 rather large
+    fans (140 mm) in line which should stay quiet at low RPM.
+    
+    <h4> Case</h4>
+    Without any bias for any particular brand (I had previously used Lian-Li and SilverStone cases), I came across favorable reviews
+    for the Fractal Design Define 7 (FD-C-DEF7A-01). It's an E-ATX case (thus bigger than needed for the ATX motherboard) and should
+    be big enough to fit the relatively large CPU cooler. From the specs it appears to be a highly modular construction, hopefully
+    allowing easy access from all sides. There's also a mounting option for an optical drive, which I will possibly add later.
+
+    <h4> Power Supply</h4>
+    Coming from several PC builds with a be quiet! power supply I was admittedly partial to that brand. Their "PURE POWER" line
+    seems like a well-balanced compromise in terms of performance and cost. I opted for the 750W version, hopin that it will suffice
+    for both a high-end CPU and a power-hungry GPU.
+
+    <h4> NIC</h4>
+    Given the smooth experience using the Intel E810-XXVDA2 in my 25 Gbit/s router/firewall project, it was a no-brainer for me to
+    choose the same NIC for my new PC build. It's a PCIe 4.0 x8 card, but since I'll only be using one of its two SFP28 interfaces 
+    I hope that I will get by with the reduced bandwidth of the x4 slot available on the motherboard.
+
+
+    <br>
     <br>
     <h3>Component List<br>
     </h3>
@@ -168,6 +229,26 @@
           <td valign="top" rowspan="1" colspan="4" align="right" width="20%">total ca. <br>
           </td>
           <td valign="top" width="8%">CHF 2’100.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="25%"><br>
+          </td>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="8%"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">GPU</td>
+          <td valign="top" width="25%">&lt;<em>undecided</em>&gt;</td>
+          <td valign="top" width="20%"><em>going with CPU internal graphics for now</em><br></td>
+          <td valign="top" width="20%"></td>
+          <td valign="top" width="8%"><br>
           </td>
         </tr>
       </tbody>
