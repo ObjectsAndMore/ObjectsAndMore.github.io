@@ -255,5 +255,29 @@
     </table>
     <br>
 
+    <br>
+    <h3>Notable Observations<br></h3>
+    <h4> PCIe power connector</h4>
+    <img src="img/TightSpacePCIePowerConnector.jpg" alt="tight space around PCIe power connector"> <br>
+
+    The motherboard comes with an 8-pin power connector ("PCIE_PWR1") at the very bottom edge of the PCB,
+    very close to the 3rd PCIe slot (PCIe 4.0 x4, "PCI_E3"). An 8-pin (actually: 6+2-pin) power cable plugged
+    in there would collide with the heat sink of the NIC installed in the PCIe slot, so I have to do without
+    any supplemental PCIe power for now. That is not a problem while I'm still running without a dedicated GPU,
+    as my NIC (hopefully) stays below 75W as per PCIe spec. When deciding for any particular GPU I will
+    specifically look for models that come with their own on-board PCIe power connectors. Otherwise, I might
+    have to build a custom wiring gadget low enough to stay out of the way (a standard, off-the-shelf 90°
+    angled plug would probably not work either, as there is simply no space in the case below ("to the
+    south of") the motherboard (there is a dividing wall there separating the compartment for the power supply). 
+    <br>
+    <h4> Case cutout at the back for PCI cards</h4>
+    The back bracket for the 3rd PCIe slot is the last/lowest one of the 7 in the case. There is a recess/cutout
+    in the case for the back brackets which is simply too tight, especially for the bottom slot. This leads to
+    problems when installing a transceiver into one of the SFP28 ports of the NIC: the transceiver's ejector lever
+    rubs against the case recess, preventing the locking mechanism from fully engaging. As a workaround, I inserted
+    the transceiver first before inserting the NIC into the PCIe slot - nasty but pragmatic. Even worse, when inserting
+    a fiber optic cable (LC connector) the connector's retaining clip remains compressed, as it is also rubs against
+    the case recess, making for an unreliable connection.
+
 </body>
 </html>
