@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="117.01682"
+   height="117.01402"
+   viewBox="0 0 117.01682 117.01402"
+   xml:space="preserve"
+   id="svg1"
+   sodipodi:docname="greenpluscircle.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs1">
+	
+	
+	
+	
+</defs><sodipodi:namedview
+   id="namedview1"
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1.0"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="3.7148438"
+   inkscape:cx="143.20925"
+   inkscape:cy="58.548895"
+   inkscape:window-width="1920"
+   inkscape:window-height="1147"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg1" />
+<path
+   d="M 58.50701,0 C 26.19482,0 0,26.19482 0,58.507007 c 0,32.31219 26.19482,58.507013 58.50701,58.507013 32.31219,0 58.50982,-26.194823 58.50982,-58.507013 C 117.01683,26.19482 90.82201,0 58.50701,0 Z"
+   style="fill:#8ace42;fill-rule:nonzero;stroke:none;stroke-width:2.81;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none"
+   stroke-linecap="round"
+   id="path1" /><polygon
+   points="18.05,47.78 8.1,47.78 8.1,42.22 18.05,42.22 18.05,32.28 23.6,32.28 23.6,42.22 33.55,42.22 33.55,47.78 23.6,47.78 23.6,57.72 18.05,57.72 "
+   style="fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none"
+   transform="matrix(2.81,0,0,2.81,0,-67.94299)"
+   id="polygon1" />
+</svg>
