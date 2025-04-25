@@ -258,8 +258,8 @@
     <br>
     <h3>Notable Observations<br></h3>
     <h4><img max-width="20" height="20" src="img/redminuscircle.svg" alt="negative"> &nbsp; PCIe power connector</h4>
-    <img src="img/TightSpacePCIePowerConnector.jpg" alt="tight space around PCIe power connector"> <br>
 
+    <img src="img/TightSpacePCIePowerConnector.jpg" alt="tight space around PCIe power connector"> <br>
     The motherboard comes with an 8-pin power connector ("PCIE_PWR1") at the very bottom edge of the PCB,
     very close to the 3rd PCIe slot (PCIe 4.0 x4, "PCI_E3"). An 8-pin (actually: 6+2-pin) power cable plugged
     in there would collide with the heat sink of the NIC installed in the PCIe slot, so I have to do without
@@ -280,6 +280,103 @@
     the transceiver first before inserting the NIC into the PCIe slot - nasty but pragmatic. Even worse, when inserting
     a fiber optic cable (LC connector) the connector's retaining clip remains compressed, as it is also rubs against
     the case recess, making for an unreliable connection.
+    <br>
+    <h4><img max-width="20" height="20" src="img/greenpluscircle.svg" alt="postive"> &nbsp; SSD speed</h4>
+    With a brand new and expensive, "true" PCIe 5.0 SSD in slot M2_1 on the motherboard, I was definitely aiming
+    for a very fast, high-end storage for the system (OS) volume that would still be considered "fast" in a couple 
+    of years time. However, only after assembling the whole rig I learnt that there might be a problem with
+    PCIe speeds of slot M2_1 on many MSI motherboards (see <a class="moz-txt-link-freetext"
+    href="https://forum-en.msi.com/index.php?threads/pcie-bug-with-m2_1-slot-on-x870e-tomahawk.409663/"
+    moz-do-not-send="true">https://forum-en.msi.com/index.php?threads/pcie-bug-with-m2_1-slot-on-x870e-tomahawk.409663/</a>).
+    The PCIe 5.0 slot would revert to PCIE 1.0 x4 after reboot, obviously resulting in a very slow read/write 
+    performance of the SSD. Luckily, it seems that my build is not affected. Perhaps it's due to the fact that
+    I am not using the main PCIe 5.0 GPU slot (PCI_E1) yet, or because Samsung's PCIe 5.0 SSD controller does not
+    trigger the problem - I don't know. At least for now I am very happy with the SSD's performance:
+    <br><br>
+    <pre><code>
+$ <b>sudo lspci -vv</b>
+[...]
+01:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd Device a810 (prog-if 02 [NVM Express])
+        Subsystem: Samsung Electronics Co Ltd Device a801
+        Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast &gt;TAbort- &lt;TAbort- &gt;MAbort- &gt;SERR- &lt;PERR- INTx-
+        Latency: 0, Cache Line Size: 64 bytes
+        Interrupt: pin A routed to IRQ 69
+        IOMMU group: 12
+        Region 0: Memory at ddb00000 (64-bit, non-prefetchable) [size=16K]
+        Capabilities: [40] Power Management version 3
+                Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
+                Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+        Capabilities: [50] MSI: Enable- Count=1/16 Maskable- 64bit+
+                Address: 0000000000000000  Data: 0000
+        Capabilities: [70] Express (v2) Endpoint, MSI 00
+                DevCap: MaxPayload 512 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
+                        ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset+ SlotPowerLimit 75W
+                DevCtl: CorrErr+ NonFatalErr+ FatalErr+ UnsupReq+
+                        RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+ FLReset-
+                        MaxPayload 512 bytes, MaxReadReq 512 bytes
+                DevSta: CorrErr+ NonFatalErr- FatalErr- UnsupReq+ AuxPwr- TransPend-
+                LnkCap: Port #0, Speed 32GT/s, Width x4, ASPM L1, Exit Latency L1 &lt;64us
+                        ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
+                LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                <font color="#ff0000"> <b>LnkSta: Speed 32GT/s, Width x4</b></font>
+                        TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
+                DevCap2: Completion Timeout: Range ABCD, TimeoutDis+ NROPrPrP- LTR+
+                         10BitTagComp+ 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
+                         EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
+                         FRS- TPHComp- ExtTPHComp-
+                         AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ 10BitTagReq- OBFF Disabled,
+                         AtomicOpsCtl: ReqEn-
+                LnkCap2: Supported Link Speeds: 2.5-32GT/s, Crosslink- Retimer+ 2Retimers+ DRS-
+                LnkCtl2: Target Link Speed: 32GT/s, EnterCompliance- SpeedDis-
+                         Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+                         Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
+                LnkSta2: Current De-emphasis Level: -3.5dB, EqualizationComplete- EqualizationPhase1-
+                         EqualizationPhase2- EqualizationPhase3- LinkEqualizationRequest-
+                         Retimer- 2Retimers- CrosslinkRes: Upstream Port
+        Capabilities: [b0] MSI-X: Enable+ Count=17 Masked-
+                Vector table: BAR=0 offset=00003000
+                PBA: BAR=0 offset=00002000
+        Capabilities: [100 v2] Advanced Error Reporting
+                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+                AERCap: First Error Pointer: 00, ECRCGenCap+ ECRCGenEn- ECRCChkCap+ ECRCChkEn-
+                        MultHdrRecCap+ MultHdrRecEn- TLPPfxPres- HdrLogCap-
+                HeaderLog: 00000000 00000000 00000000 00000000
+        Capabilities: [168 v1] Secondary PCI Express
+                LnkCtl3: LnkEquIntrruptEn- PerformEqu-
+                LaneErrStat: 0
+        Capabilities: [188 v1] Physical Layer 16.0 GT/s &lt;?&gt;
+        Capabilities: [1ac v1] Lane Margining at the Receiver &lt;?&gt;
+        Capabilities: [1c4 v1] Extended Capability ID 0x2a
+        Capabilities: [1e8 v1] Latency Tolerance Reporting
+                Max snoop latency: 1048576ns
+                Max no snoop latency: 1048576ns
+        Capabilities: [1f0 v1] L1 PM Substates
+                L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+                          PortCommonModeRestoreTime=60us PortTPowerOnTime=14us
+                L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+                           T_CommonMode=0us LTR1.2_Threshold=32768ns
+                L1SubCtl2: T_PwrOn=14us
+        Capabilities: [374 v1] Data Link Feature &lt;?&gt;
+        Kernel driver in use: nvme
+        Kernel modules: nvme
+[...]
+    </code>
+    </pre>
+    <br>
+    I have no reason to distrust lcpci, so I guess my SSD is indeed operating in PCIe 5.0 x4 mode (32GT/s). Also,
+    the read speed (&gt;14 GB/s) is very fast - as is to be expected from this choice of components. Benchmark
+    from the "Disks" utility inside Ubuntu:
+    <br><br>
+    <img src="img/SamsungSSD9100ProDisksBenchmark.png" alt="Samsung SSD 9100 Pro Disks benchmark"> <br>
+    <br>
+    (I didn't benchmark the write performance, as this would have required to take the OS file system offline.)
 
 </body>
 </html>
