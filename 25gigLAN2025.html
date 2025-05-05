@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>My 25gig LAN infrastructure upgrade 2025</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1 id="my25giglaninfrastructureupgrade2025">My 25gig LAN infrastructure upgrade 2025</h1>
+
+      After upgrading my internet connection (<a class="moz-txt-link-freetext" href="25gigRouterBuild.html">https://objectsandmore.github.io/25gigRouterBuild.html/</a>)
+      and my main workstation (<a class="moz-txt-link-freetext" href="PCBuild2025.html">https://objectsandmore.github.io/PCBuild2025.html/</a>)
+      to 25 Gbit/s, it is now time to take care of the LAN infrastructure in my house. No point in having upgraded both endpoints to
+      high-speed networking when I can't make use of it because of slow connections in between, right?
+
+      <br><br>
+      <h3>Existing LAN infrastructure<br></h3>
+
+      The LAN in my house is currently only set up for 1 Gbit/s (switches, Cat 5e wiring). Perhaps the wiring would also be good for 2.5 or 5 gbit
+      (or maybe even 10 gbit), given the short distances between rooms - I will do some experimenting. But I also plan on installing fiber in at
+      least some of the rooms. Luckily, all rooms are fitted with in-wall conduit/tubing, which is common for houses (mine was built around 2000/01) in my area,
+      with separate tubing lines for 240V power and low-voltage communications (telephone, cable TV). All conduit lines come together in a central utility room in the
+      basement, which is also where power and communication lines enter the building. This room serves as my 10" rack location hosting all my IT gear (core switch,
+      patch panels, Synology DiskStations, Cisco telephone gateway etc.). When I added Ethernet wiring a couple of years ago, I used the existing
+      low-voltage comm tubing and added shielded Cat 5e wiring alongside the telephone wire, which was tight, but doable. Now, for adding fiber, I plan on
+      adding fiber-optic cable in the tubing used for power. IMHO that should be legal and safe, as fiber-optic cable is non-conductive and should therefore not raise
+      any electrical concerns. 
+      
+      <br><br>
+      <h3>Rolling out fiber to the rooms<br></h3>
+
+      I plan on installing fiber outlets in the rooms next to the existing outlets for power and communications. For the cleanest look, I 
+      would have to go with the same vendor/brand (in my case Feller EDIZIOdue), but their fiber-compatible outlets are both extremely expensive and not very practical
+      to install (flush mounted standard 70x70 mm outlet size, very tight space, no room for a fiber splice cassette). So I will go with a bigger, surface-mounted
+      outlet. I will start with connecting my office room first and hope to learn some lessons as I go.
+
+      <br><br>
+
+      For connecting each room to the central utility room, I will use pre-assembled wall boxes that come with a 4-fiber breakout/drop cable,
+      one side fitted with a pull loop (to conveniently attach a fish tape for pulling the cable through the tubing), and the other side
+      fitted with 4 LC/APC connectors in LC/APC couplings (green) integrated in the wall box. Thus, only one side needs to be fitted with LC/APC connectors after
+      the cable has been pulled through the tubing. There are basically two options for that:
+      <br><br>
+      <ol type="a">
+        <li>splicing pigtails to the 4 fiber ends</li>
+        <li>attaching fast connectors to the 4 fiber ends (no splicing required)</li>
+      </ol> 
+      My plan is to try option (b) first. If that works out, then I can get by without the additional investment in splicing equipment. If not,
+      then I can always resort to option (a) later. However, a fiber-optic cleaver will be required in either case for cleanly cutting the fiber
+      to prepare it for inserting it into a fast connector or for splicing.      
+
+      <br><br>
+
+      <h3>Fiber type and connector choices<br></h3>
+      <h4>Multimode vs. Singlemode<br></h4>
+      Internal (LAN) wiring is typically done with multimode fiber, whereas singlemode fiber is preferred for long-distance wiring. At least that's what I have gathered
+      from various online sources. As far as I understand, singlemode fiber is more demanding, requiring tighter tolerances and therefore more expensive equipment. But 
+      it looks like singlemode equipment prices have started to come down recently, so it has become much more commonplace. Also, singlemode fiber allows for bidirectional
+      signals on two different wavelengths on the same fiber, reducing the number of required fibers by half. So, I decided to use singlemode/bidirectional fiber.
+
+      <h4>Connector Types<br></h4>
+      LC connectors (much smaller than SC connectors, about half the size) seem to have become a kind of standard for FTTH LAN wiring. Singlemode 
+      LC connectors come in either blue or green, indicating the type of fiber polishing: APC (green) or UPC (blue). Socket and connector polishing/color 
+      always have to match. Green sockets are typically used for wall outlets, while blue connecters are used on the SFP module side, so that's the standard
+      I will be following.
+
+
+
+      <br><br>
+      <h3>Switches<br></h3>
+
+      The switches will definitely have to be replaced as they are already a couple of years old and only support up to 1 Gbit/s. I have some older Netgear GS108 switches
+      and some newer Zyxel GS1200-8 switches (the latter primarily because of their IP multicast support). I have not decided on the secondary switches in the 
+      individual rooms (I will add these as I go), but I chose a Mikrotik CRS510-8XS-2XQ-IN as the primary "core" switch, apparently the only affordable model on 
+      the market at this time with enough 25 gig ports to serve as a central switch.
+
+      <br><br>
+
+      The core switch will be connected directly to the router/firewall via a 1m 25 gig DAC (Mikrotik XS+DA0001). In my experience, DACs are both cheaper and
+      become less hot during operation, compared to any other type of connection. This Mikrotik DAC has the additional advantage of supporting all
+      SFP standards/speeds relevant to me. For the connection between router and core switch, both ends will auto-negotiate to SFP28/25 gig.
+
+
+    <br>
+    <br>
+    <h3>Component List<br>
+    </h3>
+    <br>
+    <table cellpadding="2" cellspacing="2" border="1" width="100%">
+      <tbody>
+        <tr>
+          <td valign="top" width="20%">Core Switch<br>
+          </td>
+          <td valign="top" width="30%">CRS510-8XS-2XQ-IN<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/crs510_8xs_2xq_in" moz-do-not-send="true">https://mikrotik.com/product/crs510_8xs_2xq_in</a>
+            <br>
+          </td>
+          <td valign="top" width="20%">Foletti<br>
+          </td>
+          <td valign="top" width="10%">CHF 747.50<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">Fiber-optic Wall Outlet box<br>
+          </td>
+          <td valign="top" width="30%">Lightwin FTTH OTO Box 4xLC/APC<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.triotronik.com/en/SHOP/Manufacturer/Lightwin/FTTx/FTTH-OTO-Box-4-fibers-4x-LCAPC-Couplings-Breakoutcable-3---0.3.9.0-24176.html" moz-do-not-send="true">https://www.triotronik.com/en/SHOP/Manufacturer/Lightwin/FTTx/FTTH-OTO-Box-4-fibers-4x-LCAPC-Couplings-Breakoutcable-3---0.3.9.0-24176.html</a><br>
+          </td>
+          <td valign="top" width="20%">Brack<br>
+          </td>
+          <td valign="top" width="10%">CHF 55.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">Fiber-optic Fast Connector<br>
+          </td>
+          <td valign="top" width="30%">DIGITUS LC/APC Fiber Optic Fast connector (10 Pieces)<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://de.assmann.shop/en/Fiber-Optic-Network-Technology/Fiber-Optic-Couplers-and-Connectors/Field-Installable-Connectors/LC-APC-Fiber-Optic-Fast-connector-10-Pieces.html" moz-do-not-send="true">https://de.assmann.shop/en/Fiber-Optic-Network-Technology/Fiber-Optic-Couplers-and-Connectors/Field-Installable-Connectors/LC-APC-Fiber-Optic-Fast-connector-10-Pieces.html</a><br>
+          </td>
+          <td valign="top" width="20%">Am**on<br>
+          </td>
+          <td valign="top" width="10%">EUR 29.95<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">Fiber-optic Cleaver<br>
+          </td>
+          <td valign="top" width="30%">FTTH Fiber-optic Tool Kit with AUA-6C Fiber Cleaver<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.aliexpress.com/item/1005007034413862.html" moz-do-not-send="true">https://www.aliexpress.com/item/1005007034413862.html</a><br>
+          </td>
+          <td valign="top" width="20%">Al**ss<br>
+          </td>
+          <td valign="top" width="10%">CHF 26.59<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">Fiber-optic Tester<br>
+          </td>
+          <td valign="top" width="30%">Fiber-optic Visual Fault Locator/Cable Test Pen SC/FC/ST 2.5mm 50MW with FC-LC adapter<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://noctua.at/en/nh-d15-g2-lbc" moz-do-not-send="true">https://noctua.at/en/nh-d15-g2-lbc</a><br>
+          </td>
+          <td valign="top" width="20%">Al**ss</td>
+          <td valign="top" width="10%">CHF 14.99<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">Fiber-optic Patch Panel<br>
+          </td>
+          <td valign="top" width="30%">Delock 10″ Fiber Optic Patch Panel 12 Port LC Quad green 1U grey<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.delock.com/produkt/66797/merkmale.html" moz-do-not-send="true">https://www.delock.com/produkt/66797/merkmale.html</a><br>
+          </td>
+          <td valign="top" width="20%">Brack<br>
+          </td>
+          <td valign="top" width="10%">CHF 58.30<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">Fiber-optic Patch Cord<br>
+          </td>
+          <td valign="top" width="30%">10PCS/LOT LC/APC to LC/UPC Fiber Optic Patch Cord Cable LC-LC 3M Jumper Single Mode Simplex 2.0mm 3.0mm<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.aliexpress.com/item/1005001615776579.html" moz-do-not-send="true">https://www.aliexpress.com/item/1005001615776579.html</a><br>
+          </td>
+          <td valign="top" width="20%">Al**ss<br>
+          </td>
+          <td valign="top" width="10%">CHF 16.39<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">SFP/SFP+/SFP28 transceiver (pair)<br>
+          </td>
+          <td valign="top" width="30%">Mikrotik XS+2733LC15D<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/xs_2733lc15d" moz-do-not-send="true">https://mikrotik.com/product/xs_2733lc15d</a><br>
+          </td>
+          <td valign="top" width="20%">Brack<br>
+          </td>
+          <td valign="top" width="10%">CHF 302.-<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%">SFP/SFP+/SFP28 DAC (1m)<br>
+          </td>
+          <td valign="top" width="30%">Mikrotik XS+DA0001<br>
+          </td>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/xs_da0001" moz-do-not-send="true">https://mikrotik.com/product/xs_da0001</a><br>
+          </td>
+          <td valign="top" width="20%">Brack<br>
+          </td>
+          <td valign="top" width="10%">CHF 23.55<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1" colspan="4" align="right" width="90%">total ca. <br>
+          </td>
+          <td valign="top" width="10%">CHF <br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="30%"><br>
+          </td>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="20%"><br>
+          </td>
+          <td valign="top" width="10%"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="20%"></td>
+          <td valign="top" width="30%"></td>
+          <td valign="top" width="20%"></td>
+          <td valign="top" width="20%"></td>
+          <td valign="top" width="10%">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+
+
+</body>
+</html>
