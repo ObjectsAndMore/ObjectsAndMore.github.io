@@ -29,7 +29,7 @@
       with separate tubing lines for 240V power and low-voltage communications (telephone, cable TV). All conduit lines come together in a central utility room in the
       basement, which is also where power and communication lines enter the building. This room serves as my 10" rack location hosting all my IT gear (core switch,
       patch panels, Synology DiskStations, Cisco telephone gateway etc.). When I added Ethernet wiring a couple of years ago, I used the existing
-      low-voltage comm tubing and added shielded Cat 5e wiring alongside the telephone wire, which was tight, but doable. Now, for adding fiber, I plan on
+      low-voltage comm tubing and added shielded Cat 5e wiring alongside the cable TV or telephone wire, which was tight, but doable. Now, for adding fiber, I plan on
       adding fiber-optic cable in the tubing used for power. IMHO that should be legal and safe, as fiber-optic cable is non-conductive and should therefore not raise
       any electrical concerns. 
       
@@ -46,12 +46,19 @@
       For connecting each room to the central utility room, I will use pre-assembled wall boxes that come with a 4-fiber breakout/drop cable,
       one side fitted with a pull loop (to conveniently attach a fish tape for pulling the cable through the tubing), and the other side
       fitted with 4 LC/APC connectors in LC/APC couplings (green) integrated in the wall box. Thus, only one side needs to be fitted with LC/APC connectors after
-      the cable has been pulled through the tubing. There are basically two options for that:
+      the cable has been pulled through the tubing.
+      <br><br>
+      <img src="img/FiberWallOutletBox.jpg" alt="Fiber Wall Outlet Box">
+      <br><br>
+      There are basically two options for that:
       <br><br>
       <ol type="a">
         <li>splicing pigtails to the 4 fiber ends</li>
         <li>attaching fast connectors to the 4 fiber ends (no splicing required)</li>
       </ol> 
+      <br><br>
+      <img src="img/FiberOpticQuickConnector.jpg" alt="APC Fiber optic quick connector" width="15%">
+      <br><br>
       My plan is to try option (b) first. If that works out, then I can get by without the additional investment in splicing equipment. If not,
       then I can always resort to option (a) later. However, a fiber-optic cleaver will be required in either case for cleanly cutting the fiber
       to prepare it for inserting it into a fast connector or for splicing.      
@@ -71,6 +78,16 @@
       always have to match. Green sockets are typically used for wall outlets, while blue connecters are used on the SFP module side, so that's the standard
       I will be following.
 
+      <br><br>
+      <h3>Fiber-optic patch panel<br></h3>
+      All fiber lines are coming together in a 10" rack in the utility room. Since that rack already hosts an RJ-45 patch panel for the existing copper wiring,
+      it will also be a good place to host a fiber-optic patch panel where all fiber lines will be terminated. Continuing with the chosen APC/UPC convention,
+      the (female) patch sockets will be APC (green). I found an affordable 1u high, 10" fiber-optic patch panel with a total of 12 x 4 = 48 ports from Delock.
+
+      <br>
+      <br>
+      <img src="img/FiberPatchPanel.jpg" alt="Delock 66797">
+      <br>
 
 
       <br><br>
@@ -83,9 +100,20 @@
 
       <br><br>
 
-      The core switch will be connected directly to the router/firewall via a 1m 25 gig DAC (Mikrotik XS+DA0001). In my experience, DACs are both cheaper and
+      The core switch will be connected directly to the router/firewall via a 3m 25 gig DAC (Mikrotik XS+DA0003). In my experience, DACs are both cheaper and
       become less hot during operation, compared to any other type of connection. This Mikrotik DAC has the additional advantage of supporting all
       SFP standards/speeds relevant to me. For the connection between router and core switch, both ends will auto-negotiate to SFP28/25 gig.
+
+      <br><br>
+      The core switch features 8 SFP28 slots (25 gig) and 2 QSFP slots (100 gig). The latter can be divided into 4 25 gig connections each via breakout cables.
+      Thus, I have a total of 16 25 gig connections at my disposal, one of which will be used for the upstream connection to the router. Downstream, the 
+      following types of connections will be needed:
+      a second-level switch (Mikrotik CRS310-8G+2S+IN, 8x 2.5 gig Ethernet, 2x 10 gig SFP+) connected via a 1m 25 gig DAC (Mikrotik XS+DA0001)
+      One of my Synology DiskStations is equipped with a 10 gig ethernet adapter, so this will also be connected 
+      rooms pair of matching transceivers
+
+
+
 
 
     <br>
@@ -149,7 +177,7 @@
           </td>
           <td valign="top" width="30%">Fiber-optic Visual Fault Locator/Cable Test Pen SC/FC/ST 2.5mm 50MW with FC-LC adapter<br>
           </td>
-          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://noctua.at/en/nh-d15-g2-lbc" moz-do-not-send="true">https://noctua.at/en/nh-d15-g2-lbc</a><br>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://www.aliexpress.com/item/1005006862782186.html" moz-do-not-send="true">https://www.aliexpress.com/item/1005006862782186.html</a><br>
           </td>
           <td valign="top" width="20%">Al**ss</td>
           <td valign="top" width="10%">CHF 14.99<br>
@@ -192,15 +220,15 @@
           </td>
         </tr>
         <tr>
-          <td valign="top" width="20%">SFP/SFP+/SFP28 DAC (1m)<br>
+          <td valign="top" width="20%">SFP/SFP+/SFP28 DAC (3m)<br>
           </td>
-          <td valign="top" width="30%">Mikrotik XS+DA0001<br>
+          <td valign="top" width="30%">Mikrotik XS+DA0003<br>
           </td>
-          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/xs_da0001" moz-do-not-send="true">https://mikrotik.com/product/xs_da0001</a><br>
+          <td valign="top" width="20%"><a class="moz-txt-link-freetext" href="https://mikrotik.com/product/xs_da0003" moz-do-not-send="true">https://mikrotik.com/product/xs_da0003</a><br>
           </td>
           <td valign="top" width="20%">Brack<br>
           </td>
-          <td valign="top" width="10%">CHF 23.55<br>
+          <td valign="top" width="10%">CHF 31.85<br>
           </td>
         </tr>
         <tr>
@@ -232,6 +260,89 @@
       </tbody>
     </table>
     <br>
+
+
+    <br>
+    <br>
+    <h3>Installation Notes<br>
+    </h3>
+    <br>
+
+    The actual fiber installation went smoothly and was less complex than expected. Granted, fiddling with delicate strands of fibers requires patience 
+    and meticulousness, but in the end it's nothing that any moderately skilled layperson couldn't do. Using fast fiber connectors and a pre-assembled 
+    breakout/drop cable worked well. Splicing was not required for a stable 25 Gbit/s optical link, thus eliminating the need for expensive splicing equipment.
+    <br>
+    <br>
+    Pulling the drop cable through the existing conduit tubing worked OK. Lots of 3M wire pulling 
+    lubricant (<a class="moz-txt-link-freetext" href="https://www.3m.com/3M/en_US/p/d/b00040204/" moz-do-not-send="true">https://www.3m.com/3M/en_US/p/d/b00040204/</a>)
+    helped. The cable itself is kevlar-reinforced and therefore resilient enough to withstand some force when being pulled 
+    through tight conduit. With the pre-fitted loop at the pulling end tied to the pulling hook of the fish tape it was quick and easy work.
+    <br>
+    Initially, I planned to pull the fiber alongside the power wires. But then, probing with the fish tape, I didn't find a continuous path between
+    rooms. So, I switched to plan B and pulled it alongside the telephone wiring which was straight forward. As the fiber cable is quite thin (outer
+    diameter only 2.2mm), the remaining space was sufficient.
+    <br>
+    <br>
+    The cheapish fiber-optic tool kit and AUA-6C fiber cleaver proved to be of unexpectedly good quality. The 3-hole fiber stripping pliers (for stripping the 
+    outer sheath, the inner sheath, and the fiber cladding) are precisely sized to effectively remove each layer but not harm the inner layers.
+    <br>
+    <br> 
+    <img src="img/update_stamp_10degrees.svg" alt="UPDATE" width="6%">
+    <br>
+    Turns out that was not quite true, because one of the 4 strands of fiber has broken, snapped off right where the inner sheath had been cut to strip it. 
+    So, I'll have to redo the green strand of fiber and this time be more careful cutting the inner sheath.
+    <br>
+    <br>
+    I can't judge
+    the quality of cut produced by the cleaver (I didn't look at it through a microscope), but the fact that I ended up with a stable 5 Gbit/s optical link
+    suggests that it must be decent.
+    <br>
+    <br>
+    <img src="img/FiberCleaver.closed.jpg" alt="Fiber cleaver (closed)" width="30%">
+    <img src="img/FiberCleaver.open.jpg" alt="Fiber cleaver (open)" width="30%">
+    <img src="img/FiberWireStripper.jpg" alt="Fiber wire stripping pliers" width="30%">
+    <br>
+    <br>
+    The fiber-optic tester came in handy for quickly confirming a continuous connection between end points. Plug in one end (must be a UPC/blue connector, as
+    this particular tester comes with with a blue FC-LC socket adapter), and a nicely focussed beam of bright, visible (red) light should be emitted
+    on the other end, indicating a good optical connection. It also helps to identify individual strands of fiber (in case the cladding colors are not visible
+    or mixed up).
+    <br>
+    <br>
+    <img src="img/FiberOpticTester.jpg" alt="Fiber-optic tester">
+    <br>
+    <br>
+    I am not 100% happy with the fiber patch panel in my 10" rack cabinet. The patch panel itself is of good quality and definitely worth its money. But there
+    are two minor problems: firstly, the patch panel does not come with any kind of splicing tray or
+    cassette, so a couple of centimeters of delicate fibers are exposed behind the panel. For now, I have fixed the unstripped part of the fiber cable to a rack
+    rail with cable ties, to work as a strain relief. Also, I would need to mount it a bit further back, as any fiber connector plugged in from the front 
+    tends to collide with the cabinet door when closed, bending the fiber beyond its specified radius. Perhaps I will rig up some spacer nuts M6x30 to screw 
+    in the panel from the back of the rack rails, thereby shifting it 3-4 cm further back to give me a bit more clearance in the front.
+    <br>
+    <br> 
+    <img src="img/update_stamp_10degrees.svg" alt="UPDATE" width="6%">
+    <br>
+    In the meantime, I have done just that and it works OK. Not pretty and awkward to install, but no more tight bending of the fiber plugged in from the front.
+    <br>
+    <br>
+    <img src="img/FiberPatchPanel.setback.jpg" alt="Patch panel set back">
+    <br>
+    <br>
+    I had a minor problem establishing the link over the matched pair of Mikrotik XS+2733LC15D transceivers (bidrectional 1270nm/1330nm) between my PC and 
+    the Mikrotik CRS510 switch. In the "interfaces/SFP" section of the RouterOS web GUI I had to explicitly set FEC mode to to "fe91":
+    <br>
+    <br>
+    <img src="img/RouterOS_SFP_FEC_mode_fe91.png" alt="RouterOS SFP FEC mode fe91">
+    <br>
+    <br>
+    After that, the link went up immediately - at the nominal rate.
+    <br>
+    <br>
+    <img src="img/RouterOS_SFP_Link_Rate_25Gbps.png" alt="RouterOS SFP link rate 25Gbps">
+
+    
+
+
 
 
 </body>
