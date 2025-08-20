@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+<head>
+  <title>range slider example</title>
+
+  <style>
+    .w1v90hn6 {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-radius: 8px;
+    }
+
+    .o1t6knjz {
+      container-type: inline-size;
+      background: var(--color-background);
+    }
+
+    .s1hfctpl {
+      border-radius: 8px;
+      background-color: var(--color-background);
+      color: var(--color-text);
+      -webkit-print-color-scheme: dark;
+      color-scheme: dark;
+    }
+
+    .d16kq653 {
+      --color-text: #e3e6e8;
+      --color-background: #0d0f12;
+      --color-blurred-background: rgba(13, 15, 18, 0.75);
+      --color-muted-background: rgba(24, 38, 53, 0.85);
+      --color-action: #4242fa;
+      --color-primary: #809fff;
+      --color-secondary: #ff1981;
+      --color-tertiary: #e6b3ff;
+      --color-decorative: #6ac;
+      --color-info-100: #172436;
+      --color-info-200: #232f43;
+      --color-info-300: #2d3b53;
+      --color-info-400: #385a94;
+      --color-info-500: #36f;
+      --color-info-700: #70acff;
+      --color-warning-100: #231c15;
+      --color-warning-200: #2e271f;
+      --color-warning-300: #403426;
+      --color-warning-400: #816031;
+      --color-warning-500: #fa0;
+      --color-warning-700: #ffd770;
+      --color-success-100: #112221;
+      --color-success-200: #1a2d2c;
+      --color-success-300: #25413f;
+      --color-success-400: #2a6f6a;
+      --color-success-500: #0c8;
+      --color-success-700: #5eedbe;
+      --color-cloud-100: #0d0f12;
+      --color-cloud-300: #0e1620;
+      --color-cloud-400: #0f1824;
+      --color-cloud-500: #121d2b;
+      --color-sky-from: #111b27;
+      --color-sky-to: #265973;
+      --color-sky-subtle: #182939;
+      --color-gray-50: #13171b;
+      --color-gray-100: #1a1f23;
+      --color-gray-200: #272e35;
+      --color-gray-300: #454d54;
+      --color-gray-400: #5d666f;
+      --color-gray-500: #75808a;
+      --color-gray-600: #7e8c9a;
+      --color-gray-700: #9ca8b4;
+      --color-gray-800: #b9c4d0;
+      --color-gray-900: #d9e0e8;
+      --color-gray-1000: #f2f5f7;
+      --color-adaptive-white: #e6ebf0;
+      --syntax-bg: #0d0f12;
+      --syntax-highlight: #202e3c;
+      --syntax-txt: #fff;
+      --syntax-comment: #6c8a99;
+      --syntax-prop: #ff38a9;
+      --syntax-bool: #ffd500;
+      --syntax-val: #9ba6b0;
+      --syntax-str: #9a6bff;
+      --syntax-name: #c552ff;
+      --syntax-del: #ff5757;
+      --syntax-regex: #ffd500;
+      --syntax-fn: #00bfff;
+      --color-info: #99b3ff;
+      --color-info-background: rgba(153, 179, 255, 0.1);
+      --color-error: #fa3879;
+      --color-error-background: rgba(214, 5, 75, 0.1);
+      --color-success: #0c8;
+      --color-success-background: rgba(0, 204, 136, 0.1);
+      --color-alert: #fa0;
+      --color-alert-background: rgba(255, 170, 0, 0.1);
+      --color-page-background: #0d0f12;
+      --color-page-primary: #809fff;
+      --kbd-background-color: #5d666f;
+      --kbd-border-color: #454d54;
+      --color-code-bg: #1a1f23;
+      --color-content-outline: #454d54;
+      color: var(--color-text);
+      background: var(--color-background);
+      border-radius: 4px;
+      -webkit-print-color-scheme: dark;
+      color-scheme: dark;
+      --selection-background-color: rgba(139, 133, 173, 0.35);
+      --selection-text-color: #fff;
+      --scrollbar-bg: var(--color-background);
+      --scrollbar-thumb: var(--color-gray-400);
+      --scrollbar-thumb-hover: var(--color-gray-500);
+      --wham-primary-500: oklch(0.87 0.2 90/1);
+      --wham-primary-300: oklch(0.95 0.15 90/1);
+      --wham-complementary-500: oklch(0.87 0.25 164/1);
+      --wham-complementary-300: oklch(0.92 0.14 172/1);
+      --wham-alternative-500: oklch(0.67 0.3 358/1);
+      --wham-alternative-300: oklch(0.78 0.2 350/1);
+      --wham-alternative-700: oklch(0.53 0.24 360/1);
+    }
+
+    .d16kq653 .bis146 {
+      --pb-background-color: transparent;
+      --pb-highlight-color: rgba(196, 204, 212, 0.2);
+      --selection-background-color: var(--pb-highlight-color);
+      --selection-text-color: #fff;
+      outline: 1px solid var(--color-gray-300);
+      color: #fff;
+    }
+
+    .d16kq653 .bis146:focus-visible {
+      outline: 3px auto var(--color-primary);
+    }
+
+    .d16kq653 .bcww6zb {
+      --pb-background-color: oklch(0.87 0.2 90);
+      --pb-highlight-color: oklch(0.95 0.15 90);
+      --selection-background-color: var(--pb-highlight-color);
+      --selection-text-color: #000;
+      color: #000;
+    }
+
+    .gj1mt5k {
+      display: grid;
+      grid-template-areas: "svg code";
+      grid-template-columns: 280px 1fr;
+      grid-gap: 16px;
+      gap: 16px;
+    }
+
+    @container (max-width: 36rem) {
+      .gj1mt5k {
+        grid-template-areas: "code" "svg";
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+
+    .s1tjkkdj {
+      align-self: start;
+      position: relative;
+      display: flex;
+      grid-area: svg;
+    }
+
+    @container (max-width: 36rem) {
+      .s1tjkkdj {
+        position: relative;
+      }
+    }
+
+    .s1j66pt9 {
+      outline: 1px solid #fff;
+      border-radius: 2px;
+    }
+
+    .i1wntda9 {
+      transition: opacity 0.25s;
+    }
+
+    .gqltevh {
+      stroke: #fff;
+      stroke-width: 2px;
+      stroke-dasharray: 4 6;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.5s, stroke-dashoffset 0.5s;
+    }
+
+    .gqltevh[data-is-active="true"] {
+      stroke-dasharray: 10 0;
+      stroke-dashoffset: 3;
+      transition: stroke-dasharray 0.2s, stroke-dashoffset 0.2s;
+    }
+
+    .gvcx5r.gqltevh {
+      stroke: var(--color-background);
+      stroke-width: 5px;
+    }
+
+    .g1mx31e3.gqltevh[data-is-active="true"] {
+      stroke: var(--wham-primary-500);
+    }
+
+    .ley0nm0 {
+      font-size: 1rem;
+      font-family: var(--font-family-mono);
+      transition: opacity 0.2s;
+      pointer-events: none;
+      --selection-color: #fff;
+      --selection-background: var(--color-background);
+    }
+
+    .ley0nm0[data-is-hidden="true"] {
+      opacity: 0;
+    }
+
+    .l1s5y600.ley0nm0 {
+      fill: var(--color-background);
+      stroke: var(--color-background);
+      stroke-width: 5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .l1tcs5u4.ley0nm0 {
+      fill: #fff;
+      transition: opacity 0.2s, fill 0.2s;
+    }
+
+    .l1tcs5u4.ley0nm0[data-is-active="true"] {
+      fill: var(--wham-primary-500);
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<html>
+  <body>
+    <input id="myinput" type="range" min="0" max="280" step="10" />
+
+    <p>Value: <output id="myvalue"></output></p>
+
+    <div class="wrapper">
+      <p>Check out this SVG:</p>
+
+      <svg width="100" height="100">
+        <circle fill="hotpink" r="30" cx="50" cy="50" />
+      </svg>
+    </div>
+
+    <div class="w1v90hn6">
+      <div class="o1t6knjz s1hfctpl d16kq653">
+        <div class="gj1mt5k">
+          <div class="s1tjkkdj">
+            <svg width="280" height="280" class="s1j66pt9">
+              <defs>
+                <pattern
+                  id="R2mpheiavfelb-grid"
+                  width="20"
+                  height="20"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 20 0 L 20 20 M 0 20 L 20 20"
+                    fill="none"
+                    stroke="hsl(0 0% 80%)"
+                    stroke-width="0.5"
+                  ></path>
+                </pattern>
+              </defs>
+              <rect
+                width="100%"
+                height="100%"
+                fill="url(#R2mpheiavfelb-grid)"
+                fill-opacity="0.5"
+              ></rect>
+              <g style="opacity: 1" class="i1wntda9">
+                <line
+                  data-is-active="false"
+                  x1="183"
+                  y1="210"
+                  x2="0"
+                  y2="210"
+                  class="gvcx5r gqltevh"
+                  id="linex1a"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="183"
+                  y1="210"
+                  x2="0"
+                  y2="210"
+                  class="g1mx31e3 gqltevh"
+                  id="linex1b"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="190"
+                  y1="203"
+                  x2="190"
+                  y2="0"
+                  class="gvcx5r gqltevh"
+                  id="liney1a"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="190"
+                  y1="203"
+                  x2="190"
+                  y2="0"
+                  class="g1mx31e3 gqltevh"
+                  id="liney1b"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="183"
+                  y1="240"
+                  x2="0"
+                  y2="240"
+                  class="gvcx5r gqltevh"
+                  id="linex2a"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="183"
+                  y1="240"
+                  x2="0"
+                  y2="240"
+                  class="g1mx31e3 gqltevh"
+                  id="linex2b"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="190"
+                  y1="233"
+                  x2="190"
+                  y2="0"
+                  class="gvcx5r gqltevh"
+                  id="liney2a"
+                ></line>
+                <line
+                  data-is-active="false"
+                  x1="190"
+                  y1="233"
+                  x2="190"
+                  y2="0"
+                  class="g1mx31e3 gqltevh"
+                  id="liney2b"
+                ></line>
+                <line
+                  x1="190"
+                  y1="210"
+                  x2="190"
+                  y2="240"
+                  stroke="var(--wham-complementary-500)"
+                  stroke-width="5"
+                  id="linexy1toxy2"
+                ></line>
+                <text
+                  x="95"
+                  y="230"
+                  text-anchor="middle"
+                  dominant-baseline="bottom"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1s5y600 ley0nm0"
+                  id="textx1a"
+                >
+                  x1
+                </text>
+                <text
+                  x="95"
+                  y="230"
+                  text-anchor="middle"
+                  dominant-baseline="bottom"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1tcs5u4 ley0nm0"
+                  id="textx1b"
+                >
+                  x1
+                </text>
+                <text
+                  x="220"
+                  y="105"
+                  text-anchor="end"
+                  dominant-baseline="middle"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1s5y600 ley0nm0"
+                  id="texty1a"
+                >
+                  y1
+                </text>
+                <text
+                  x="220"
+                  y="105"
+                  text-anchor="end"
+                  dominant-baseline="middle"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1tcs5u4 ley0nm0"
+                  id="texty1b"
+                >
+                  y1
+                </text>
+                <text
+                  x="95"
+                  y="260"
+                  text-anchor="middle"
+                  dominant-baseline="bottom"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1s5y600 ley0nm0"
+                  id="textx2a"
+                >
+                  x2
+                </text>
+                <text
+                  x="95"
+                  y="260"
+                  text-anchor="middle"
+                  dominant-baseline="bottom"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1tcs5u4 ley0nm0"
+                  id="textx2b"
+                >
+                  x2
+                </text>
+                <text
+                  x="220"
+                  y="120"
+                  text-anchor="end"
+                  dominant-baseline="middle"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1s5y600 ley0nm0"
+                  id="texty2a"
+                >
+                  y2
+                </text>
+                <text
+                  x="220"
+                  y="120"
+                  text-anchor="end"
+                  dominant-baseline="middle"
+                  font-size="1rem"
+                  data-is-hidden="false"
+                  data-is-active="false"
+                  class="l1tcs5u4 ley0nm0"
+                  id="texty2b"
+                >
+                  y2
+                </text>
+                <circle cx="190" cy="210" r="5" fill="var(--color-background)" id="circle1a"></circle>
+                <circle cx="190" cy="210" r="3" fill="white" id="circle1b"></circle>
+                <circle cx="190" cy="240" r="5" fill="var(--color-background)" id="circle2a"></circle>
+                <circle cx="190" cy="240" r="3" fill="white" id="circle2b"></circle>
+              </g>
+            </svg>
+            <div class="w1vxraon"></div>
+          </div>
+          <div class="c1fvq5of">
+            <div class="cujkhw1">
+              <div
+                translate="no"
+                data-locked-to-color-mode="dark"
+                data-less-bottom-margin="false"
+                style="--max-height: auto"
+                class="c1qvfy1x ae97emi"
+              >
+                <button data-locked-to-color-mode="dark" class="wqxmqd2">
+                  <span
+                    style="
+                      transform: translate(0px) rotate(0deg) scale(1);
+                      backface-visibility: hidden;
+                    "
+                    class="i1htlkn0"
+                  >
+                    <span style="transform: rotate(0deg)" class="i14jtb2i">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-clipboard"
+                      >
+                        <rect
+                          width="8"
+                          height="4"
+                          x="8"
+                          y="2"
+                          rx="1"
+                          ry="1"
+                        ></rect>
+                        <path
+                          d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                        ></path></svg
+                      ><span
+                        style="opacity: 0; transform: scale(0)"
+                        class="c6am5ut"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-check"
+                        >
+                          <path d="M20 6 9 17l-5-5"></path></svg></span
+                      ><span class="haso6lc wlgbkjj"
+                        >Copy to clipboard</span
+                      ></span
+                    ></span
+                  >
+                </button>
+                <div class="w19zxykk w1ey322x">
+                  <pre
+                    class="shiki shiki-themes josh-theme-dark josh-theme-light"
+                    style="
+                      background-color: #0d0f1200;
+                      --shiki-light-bg: #f5f6f900;
+                      color: #ffffffff;
+                      --shiki-light: #000000;
+                    "
+                  ><code><span class="line"><span style="color:#B9C4D0FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">&lt;</span><span style="color:#FF38A9FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">svg</span><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF"> width</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">280</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF"> height</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">280</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#B9C4D0FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">&gt;</span></span>
+<span class="line"><span style="color:#B9C4D0FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">  &lt;</span><span style="color:#FF38A9FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">line</span></span>
+<span class="line"><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF">    x1</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold" id="basic-line-demo_code_val_x1">190</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span></span>
+<span class="line"><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF">    y1</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold" id="basic-line-demo_code_val_y1">210</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span></span>
+<span class="line"><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF">    x2</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold" id="basic-line-demo_code_val_x2">190</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span></span>
+<span class="line"><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF">    y2</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold" id="basic-line-demo_code_val_y2">240</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span></span>
+<span class="line"><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF">    stroke</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">oklch(0.9 0.3 164)</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span></span>
+<span class="line"><span style="color:#FF38A9FF;--shiki-light:#AA00FFFF">    stroke-width</span><span style="color:#B9C4D0FF;--shiki-light:#000000">=</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span><span style="color:#FFD500FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">5</span><span style="color:#B9C4D0FF;--shiki-light:#0000FF;font-weight:inherit;--shiki-light-font-weight:bold">"</span></span>
+<span class="line"><span style="color:#B9C4D0FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">  /&gt;</span></span>
+<span class="line"><span style="color:#B9C4D0FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">&lt;/</span><span style="color:#FF38A9FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">svg</span><span style="color:#B9C4D0FF;--shiki-light:#DA0079FF;font-weight:inherit;--shiki-light-font-weight:bold">&gt;</span></span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="c183pwrh">
+        <div style="grid-area: x1" class="s4h798d">
+          <div style="opacity: 1" class="h1pypve8">
+            <label for="basic-line-demo_x1" class="lpsyt9t">x1<!-- -->:</label
+            ><span class="w1194iyg" id="basic-line-demo_val_x1">190</span>
+          </div>
+          <div class="cxwqm2n">
+            <input
+              style="
+                --handle-color: var(--color-gray-900);
+                --handle-focus-color: radial-gradient(
+                    hsl(48deg 100% 75% / 1),
+                    hsl(48deg 100% 75% / 0) 40%
+                  ),
+                  conic-gradient(
+                    from 90deg at 50% 50%,
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 95%),
+                    hsl(45deg 100% 55%)
+                  );
+                --background-color: var(--color-background);
+                --base-handle-size: 16px;
+                --track-size: 3px;
+              "
+              type="range"
+              id="basic-line-demo_x1"
+              min="0"
+              max="280"
+              step="10"
+              class="i1i8zjy7"
+              value="80"
+            />
+          </div>
+        </div>
+        <div style="grid-area: y1" class="s4h798d">
+          <div style="opacity: 1" class="h1pypve8">
+            <label for="basic-line-demo_y1" class="lpsyt9t">y1<!-- -->:</label
+            ><span class="w1194iyg" id="basic-line-demo_val_y1">210</span>
+          </div>
+          <div class="cxwqm2n">
+            <input
+              style="
+                --handle-color: var(--color-gray-900);
+                --handle-focus-color: radial-gradient(
+                    hsl(48deg 100% 75% / 1),
+                    hsl(48deg 100% 75% / 0) 40%
+                  ),
+                  conic-gradient(
+                    from 90deg at 50% 50%,
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 95%),
+                    hsl(45deg 100% 55%)
+                  );
+                --background-color: var(--color-background);
+                --base-handle-size: 16px;
+                --track-size: 3px;
+              "
+              type="range"
+              id="basic-line-demo_y1"
+              min="0"
+              max="280"
+              step="10"
+              class="i1i8zjy7"
+              value="80"
+            />
+          </div>
+        </div>
+        <div style="grid-area: x2" class="s4h798d">
+          <div style="opacity: 1" class="h1pypve8">
+            <label for="basic-line-demo_x2" class="lpsyt9t">x2<!-- -->:</label
+            ><span class="w1194iyg" id="basic-line-demo_val_x2">190</span>
+          </div>
+          <div class="cxwqm2n">
+            <input
+              style="
+                --handle-color: var(--color-gray-900);
+                --handle-focus-color: radial-gradient(
+                    hsl(48deg 100% 75% / 1),
+                    hsl(48deg 100% 75% / 0) 40%
+                  ),
+                  conic-gradient(
+                    from 90deg at 50% 50%,
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 95%),
+                    hsl(45deg 100% 55%)
+                  );
+                --background-color: var(--color-background);
+                --base-handle-size: 16px;
+                --track-size: 3px;
+              "
+              type="range"
+              id="basic-line-demo_x2"
+              min="0"
+              max="280"
+              step="10"
+              class="i1i8zjy7"
+              value="200"
+            />
+          </div>
+        </div>
+        <div style="grid-area: y2" class="s4h798d">
+          <div style="opacity: 1" class="h1pypve8">
+            <label for="basic-line-demo_y2" class="lpsyt9t">y2<!-- -->:</label
+            ><span class="w1194iyg" id="basic-line-demo_val_y2">240</span>
+          </div>
+          <div class="cxwqm2n">
+            <input
+              style="
+                --handle-color: var(--color-gray-900);
+                --handle-focus-color: radial-gradient(
+                    hsl(48deg 100% 75% / 1),
+                    hsl(48deg 100% 75% / 0) 40%
+                  ),
+                  conic-gradient(
+                    from 90deg at 50% 50%,
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 75%),
+                    hsl(45deg 100% 55%),
+                    hsl(52deg 100% 95%),
+                    hsl(45deg 100% 55%)
+                  );
+                --background-color: var(--color-background);
+                --base-handle-size: 16px;
+                --track-size: 3px;
+              "
+              type="range"
+              id="basic-line-demo_y2"
+              min="0"
+              max="280"
+              step="10"
+              class="i1i8zjy7"
+              value="200"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const input = document.querySelector("#myinput");
+      const value = document.querySelector("#myvalue");
+
+      const inp_x1 = document.querySelector("#basic-line-demo_x1");
+      const inp_y1 = document.querySelector("#basic-line-demo_y1");
+      const inp_x2 = document.querySelector("#basic-line-demo_x2");
+      const inp_y2 = document.querySelector("#basic-line-demo_y2");
+
+      const val_x1 = document.querySelector("#basic-line-demo_val_x1");
+      const val_y1 = document.querySelector("#basic-line-demo_val_y1");
+      const val_x2 = document.querySelector("#basic-line-demo_val_x2");
+      const val_y2 = document.querySelector("#basic-line-demo_val_y2");
+
+      const code_val_x1 = document.querySelector("#basic-line-demo_code_val_x1");
+      const code_val_y1 = document.querySelector("#basic-line-demo_code_val_y1");
+      const code_val_x2 = document.querySelector("#basic-line-demo_code_val_x2");
+      const code_val_y2 = document.querySelector("#basic-line-demo_code_val_y2");
+
+      const myliney1a = document.querySelector("#liney1a");
+      const myliney1b = document.querySelector("#liney1b");
+      const myliney2a = document.querySelector("#liney2a");
+      const myliney2b = document.querySelector("#liney2b");
+      const mylinexy1toxy2 = document.querySelector("#linexy1toxy2");
+      const mylinex1a = document.querySelector("#linex1a");
+      const mylinex1b = document.querySelector("#linex1b");
+      const mylinex2a = document.querySelector("#linex2a");
+      const mylinex2b = document.querySelector("#linex2b");
+
+      const mycircle1a = document.querySelector("#circle1a");
+      const mycircle1b = document.querySelector("#circle1b");
+      const mycircle2a = document.querySelector("#circle2a");
+      const mycircle2b = document.querySelector("#circle2b");
+
+      const mytextx1a = document.querySelector("#textx1a");
+      const mytextx1b = document.querySelector("#textx1b");
+      const mytexty1a = document.querySelector("#texty1a");
+      const mytexty1b = document.querySelector("#texty1b");
+      const mytextx2a = document.querySelector("#textx2a");
+      const mytextx2b = document.querySelector("#textx2b");
+      const mytexty2a = document.querySelector("#texty2a");
+      const mytexty2b = document.querySelector("#texty2b");
+
+      value.textContent = input.value;
+      input.addEventListener("input", (event) => {
+        value.textContent = event.target.value;
+      });
+
+      val_x1.textContent = inp_x1.value;
+      code_val_x1.textContent = inp_x1.value;
+
+      myliney1a.setAttribute("x1", inp_x1.value);
+      myliney1a.setAttribute("y1", "0");
+      myliney1a.setAttribute("x2", inp_x1.value);
+      myliney1a.setAttribute("y1", inp_y1.value);
+      myliney1b.setAttribute("x1", inp_x1.value);
+      myliney1b.setAttribute("y1", "0");
+      myliney1b.setAttribute("x2", inp_x1.value);
+      myliney1b.setAttribute("y1", inp_y1.value);
+
+      myliney2a.setAttribute("x1", inp_x2.value);
+      myliney2a.setAttribute("y1", "0");
+      myliney2a.setAttribute("x2", inp_x2.value);
+      myliney2a.setAttribute("y1", inp_y2.value);
+      myliney2b.setAttribute("x1", inp_x2.value);
+      myliney2b.setAttribute("y1", "0");
+      myliney2b.setAttribute("x2", inp_x2.value);
+      myliney2b.setAttribute("y1", inp_y2.value);
+
+      mylinexy1toxy2.setAttribute("x1", inp_x1.value);
+      mylinexy1toxy2.setAttribute("y1", inp_y1.value);
+      mylinexy1toxy2.setAttribute("x2", inp_x2.value);
+      mylinexy1toxy2.setAttribute("y2", inp_y2.value);
+
+      mylinex1a.setAttribute("x1", inp_x1.value);
+      mylinex1a.setAttribute("y1", inp_y1.value);
+      mylinex1a.setAttribute("y2", inp_y1.value);
+
+      mylinex1b.setAttribute("x1", inp_x1.value);
+      mylinex1b.setAttribute("y1", inp_y1.value);
+      mylinex1b.setAttribute("y2", inp_y1.value);
+
+      mylinex2a.setAttribute("x1", inp_x2.value);
+      mylinex2a.setAttribute("y1", inp_y2.value);
+      mylinex2a.setAttribute("y2", inp_y2.value);
+
+      mylinex2b.setAttribute("x1", inp_x2.value);
+      mylinex2b.setAttribute("y1", inp_y2.value);
+      mylinex2b.setAttribute("y2", inp_y2.value);
+
+      mycircle1a.setAttribute("cx", inp_x1.value);
+      mycircle1a.setAttribute("cy", inp_y1.value);
+      mycircle1b.setAttribute("cx", inp_x1.value);
+      mycircle1b.setAttribute("cy", inp_y1.value);
+
+      mycircle2a.setAttribute("cx", inp_x2.value);
+      mycircle2a.setAttribute("cy", inp_y2.value);
+      mycircle2b.setAttribute("cx", inp_x2.value);
+      mycircle2b.setAttribute("cy", inp_y2.value);
+
+      mytextx1a.setAttribute("x", parseInt(inp_x1.value) / 2);
+      mytextx1a.setAttribute("y", parseInt(inp_y1.value) + 20);
+      mytextx1b.setAttribute("x", parseInt(inp_x1.value) / 2);
+      mytextx1b.setAttribute("y", parseInt(inp_y1.value) + 20);
+
+      mytextx2a.setAttribute("x", parseInt(inp_x2.value) / 2);
+      mytextx2a.setAttribute("y", parseInt(inp_y2.value) + 20);
+      mytextx2b.setAttribute("x", parseInt(inp_x2.value) / 2);
+      mytextx2b.setAttribute("y", parseInt(inp_y2.value) + 20);
+
+      mytexty1a.setAttribute("y", parseInt(inp_y1.value) / 2);
+      mytexty1a.setAttribute("x", parseInt(inp_x1.value) + 30);
+      mytexty1b.setAttribute("y", parseInt(inp_y1.value) / 2);
+      mytexty1b.setAttribute("x", parseInt(inp_x1.value) + 30);
+
+      mytexty2a.setAttribute("y", parseInt(inp_y2.value) / 2);
+      mytexty2a.setAttribute("x", parseInt(inp_x2.value) + 30);
+      mytexty2b.setAttribute("y", parseInt(inp_y2.value) / 2);
+      mytexty2b.setAttribute("x", parseInt(inp_x2.value) + 30);
+
+      inp_x1.addEventListener("input", (event) => {
+        val_x1.textContent = event.target.value;
+        code_val_x1.textContent = event.target.value;
+        myliney1a.setAttribute("x1", event.target.value);
+        myliney1a.setAttribute("x2", event.target.value);
+        myliney1b.setAttribute("x1", event.target.value);
+        myliney1b.setAttribute("x2", event.target.value);
+        mylinexy1toxy2.setAttribute("x1", event.target.value);
+        mylinex1a.setAttribute("x1", event.target.value);
+        mylinex1b.setAttribute("x1", event.target.value);
+        mylinex1b.setAttribute("data-is-active", "true");
+        mycircle1a.setAttribute("cx", event.target.value);
+        mycircle1b.setAttribute("cx", event.target.value);
+        mytextx1b.setAttribute("data-is-active", "true");
+        mytextx1a.setAttribute("x", parseInt(event.target.value) / 2);
+        mytextx1b.setAttribute("x", parseInt(event.target.value) / 2);
+        mytexty1a.setAttribute("x", parseInt(event.target.value) + 30);
+        mytexty1b.setAttribute("x", parseInt(event.target.value) + 30);
+      })
+
+      inp_y1.addEventListener("input", (event) => {
+        val_y1.textContent = event.target.value;
+        code_val_y1.textContent = event.target.value;
+        mylinex1a.setAttribute("y1", event.target.value);
+        mylinex1a.setAttribute("y2", event.target.value);
+        mylinex1b.setAttribute("y1", event.target.value);
+        mylinex1b.setAttribute("y2", event.target.value);
+        mylinexy1toxy2.setAttribute("y1", event.target.value);
+        myliney1a.setAttribute("y1", event.target.value);
+        myliney1b.setAttribute("y1", event.target.value);
+        myliney1b.setAttribute("data-is-active", "true");
+        mycircle1a.setAttribute("cy", event.target.value);
+        mycircle1b.setAttribute("cy", event.target.value);
+        mytexty1b.setAttribute("data-is-active", "true");
+        mytextx1a.setAttribute("y", parseInt(event.target.value) + 20);
+        mytextx1b.setAttribute("y", parseInt(event.target.value) + 20);
+        mytexty1a.setAttribute("y", parseInt(event.target.value) / 2);
+        mytexty1b.setAttribute("y", parseInt(event.target.value) / 2);
+      })
+
+      inp_x2.addEventListener("input", (event) => {
+        val_x2.textContent = event.target.value;
+        code_val_x2.textContent = event.target.value;
+        myliney2a.setAttribute("x1", event.target.value);
+        myliney2a.setAttribute("x2", event.target.value);
+        myliney2b.setAttribute("x1", event.target.value);
+        myliney2b.setAttribute("x2", event.target.value);
+        mylinexy1toxy2.setAttribute("x2", event.target.value);
+        mylinex2a.setAttribute("x1", event.target.value);
+        mylinex2b.setAttribute("x1", event.target.value);
+        mylinex2b.setAttribute("data-is-active", "true");
+        mycircle2a.setAttribute("cx", event.target.value);
+        mycircle2b.setAttribute("cx", event.target.value);
+        mytextx2b.setAttribute("data-is-active", "true");
+        mytextx2a.setAttribute("x", parseInt(event.target.value) / 2);
+        mytextx2b.setAttribute("x", parseInt(event.target.value) / 2);
+        mytexty2a.setAttribute("x", parseInt(event.target.value) + 30);
+        mytexty2b.setAttribute("x", parseInt(event.target.value) + 30);
+      })
+
+      inp_y2.addEventListener("input", (event) => {
+        val_y2.textContent = event.target.value;
+        code_val_y2.textContent = event.target.value;
+        mylinex2a.setAttribute("y1", event.target.value);
+        mylinex2a.setAttribute("y2", event.target.value);
+        mylinex2b.setAttribute("y1", event.target.value);
+        mylinex2b.setAttribute("y2", event.target.value);
+        mylinexy1toxy2.setAttribute("y2", event.target.value);
+        myliney2a.setAttribute("y1", event.target.value);
+        myliney2b.setAttribute("y1", event.target.value);
+        myliney2b.setAttribute("data-is-active", "true");
+        mycircle2a.setAttribute("cy", event.target.value);
+        mycircle2b.setAttribute("cy", event.target.value);
+        mytexty2b.setAttribute("data-is-active", "true");
+        mytextx2a.setAttribute("y", parseInt(event.target.value) + 20);
+        mytextx2b.setAttribute("y", parseInt(event.target.value) + 20);
+        mytexty2a.setAttribute("y", parseInt(event.target.value) / 2);
+        mytexty2b.setAttribute("y", parseInt(event.target.value) / 2);
+      })
+
+      addEventListener("mouseup", (event) => {
+        myliney1b.setAttribute("data-is-active", "false");
+        myliney2b.setAttribute("data-is-active", "false");
+        mylinex1b.setAttribute("data-is-active", "false");
+        mylinex2b.setAttribute("data-is-active", "false");
+        mytextx1b.setAttribute("data-is-active", "false");
+        mytexty1b.setAttribute("data-is-active", "false");
+        mytextx2b.setAttribute("data-is-active", "false");
+        mytexty2b.setAttribute("data-is-active", "false");
+       })
+
+      </script>
+  </body>
+</html>
