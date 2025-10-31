@@ -289,6 +289,37 @@ myuser@raspberrypi5:~/Downloads/ttyd $ <b>sudo ./ttyd.aarch64 --ssl --ssl-cert /
         <pre style=" background-color:whitesmoke">
 myuser@raspberrypi5:~ $ <b>cloudflared tunnel run --token eyJhIjoi_...someToken..._TmpNMSJ9</b>
 </pre>
+
+        Note: instead of starting both programs interactively in the shell (not being available after a reboot), here's how to run both as systemd services (automatically started at boot time):
+        <br>
+        For cloudflared, a single command will take care of installing, enabling, and starting the systemd service:
+        <pre style=" background-color:whitesmoke">
+myuser@raspberrypi5:~ $ <b>sudo cloudflared service install eyJhIjoi_...someToken..._TmpNMSJ9</b>
+        </pre>
+        For ttyd, it is a bit more work. First, create the service specification file manually with the following content:
+        <pre style=" background-color:whitesmoke">
+myuser@raspberrypi5:~/Downloads/ttyd $ <b>cat /etc/systemd/system/ttyd.service</b>
+[Unit]
+Description=TTYD
+After=syslog.target
+After=network.target
+
+[Service]
+ExecStart=/home/ape/Downloads/ttyd/ttyd.aarch64 -t enableZmodem=true --ssl --ssl-cert /home/ape/Downloads/ttyd/ttyd.crt --ssl-key /home/ape/Downloads/ttyd/ttyd.key -W login
+Type=simple
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+</pre>
+Then, start and enable the systemd service as follows:
+        <pre style=" background-color:whitesmoke">
+myuser@raspberrypi5:~/Downloads/ttyd $ <b>sudo systemctl start ttyd</b>
+myuser@raspberrypi5:~/Downloads/ttyd $ <b>sudo systemctl enable ttyd</b>
+</pre>
+
         <hr />
         <p>With all of the above in place, it is now possible to connect to the
             ttyd web GUI from anywhere on the internet using the public URL <a
