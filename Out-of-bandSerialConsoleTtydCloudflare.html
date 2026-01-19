@@ -305,7 +305,7 @@ After=syslog.target
 After=network.target
 
 [Service]
-ExecStart=/home/ape/Downloads/ttyd/ttyd.aarch64 -t enableZmodem=true --ssl --ssl-cert /home/ape/Downloads/ttyd/ttyd.crt --ssl-key /home/ape/Downloads/ttyd/ttyd.key -W login
+ExecStart=/home/myuser/Downloads/ttyd/ttyd.aarch64 -t enableZmodem=true --ssl --ssl-cert /home/myuser/Downloads/ttyd/ttyd.crt --ssl-key /home/myuser/Downloads/ttyd/ttyd.key -W login
 Type=simple
 Restart=always
 User=root
