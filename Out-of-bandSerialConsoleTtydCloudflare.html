@@ -260,6 +260,15 @@ myuser@raspberrypi5:~/Downloads/ttyd $ <b>sudo ./ttyd.aarch64 --ssl --ssl-cert /
         <br>
         <br>
 
+        <p>You may have to explicitly disable TLS verification if you don't want
+            to bother with proper certificates on your local network (by default
+            cloudflared will not accept improper certificates, resulting in
+            HTTP 502 "Bad Gateway" errors):</p>
+        <br>
+        <img src="img/CloudflareNoTLSVerify.png" alt="Cloudflare No TLS Verify.png">
+        <br>
+        <br>
+
         <p>Then, in the Cloudflare Zero Trust dashboard -&gt; Access -&gt;
             Applications, create a new application also named “rpi5ttyd” with the
             following settings/policy (stick with the default login method “One-time
