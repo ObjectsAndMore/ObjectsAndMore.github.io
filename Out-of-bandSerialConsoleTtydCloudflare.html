@@ -171,13 +171,19 @@ lrwxrwxrwx 1 root root 13 Oct 23 19:13 usb0b1.2p1.0 -> ../../<font color="red">t
         <pre style=" background-color:whitesmoke">
 myuser@raspberrypi5:~ $ <b>sudo minicom --device /dev/ttyUSB0</b>
 </pre>
-        <p>Note that in Minicom (connecting to the VyOS console) I always have
+        <p><s>Note that in Minicom (connecting to the VyOS console) I always have
             to press <span style="font-family: monospace; font-weight:bold; background-color:whitesmoke">&lt;ctrl&gt;-A
                 Z</span> and then <span
                 style="font-family: monospace; font-weight:bold; background-color:whitesmoke">send
                 break………F</span> to get a login prompt - I haven&apos;t found out why
-            yet.</p>
-        <br>
+            yet.</s></p>
+        <p>Not true - simply hitting the return key will do.</p>
+        <p>Hint: inside minicom, after logging in to the target system, the terminal will probably be 80x24, i.e. 24 rows of 
+            length 80. To change that, manually alter the terminal settings using stty as in the following example:
+        <pre style=" background-color:whitesmoke">
+myuserg@myhost:~$ <b>stty rows 50 cols 180</b>            
+</pre>
+        </p>
         <br>
         <ol start="5" type="1">
             <li><strong>make the Raspberry Pi ssh access available via ttyd web
