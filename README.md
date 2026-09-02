@@ -4,4 +4,4 @@
 
 [My 25gig LAN infrastructure upgrade 2025](/25gigLAN2025.html)
 
-[ttyd access to a serial console connection over a null-modem USB cable](/Out-of-bandSerialConsoleTtydCloudflare.html)
+[Cloudflare zero trust based out-of-band access to a serial console connection to my router over a null-modem USB cable](/Out-of-bandSerialConsoleTtydCloudflare.html)
