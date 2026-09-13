@@ -5,3 +5,5 @@
 [My 25gig LAN infrastructure upgrade 2025](/25gigLAN2025.html)
 
 [Cloudflare zero trust based out-of-band access to a serial console connection to my router over a null-modem USB cable](/Out-of-bandSerialConsoleTtydCloudflare.html)
+
+[Motorcycle Helmet Hook Triumph/Shoei 2026](/MotorcycleHelmetHook.html)
