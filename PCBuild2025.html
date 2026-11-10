@@ -117,10 +117,26 @@
     for both a high-end CPU and a power-hungry GPU.
 
     <h4> NIC</h4>
-    Given the smooth experience using the Intel E810-XXVDA2 in my 25 Gbit/s router/firewall project, it was a no-brainer for me to
+    Given the smooth experience using the Intel E810-XXVDA2 in my 
+    <a class="moz-txt-link-freetext" href="25gigRouterBuild.html">25 Gbit/s router/firewall project</a>, it was a no-brainer for me to
     choose the same NIC for my new PC build. It's a PCIe 4.0 x8 card, but since I'll only be using one of its two SFP28 interfaces, 
     I hope that I will get by with the reduced bandwidth of the x4 slot available on the motherboard.
-
+    <br><br>
+    <img src="img/update_stamp_10degrees.svg" alt="UPDATE" width="6%">
+    <br>
+    Initially, I had indeed been struggling with getting the full download speed after I had also upgraded my LAN infrastructure to 25 gig.
+    Upload speed was fine (close to the theoretical limit of 25Gbps), but download speed maxed out at ~8 Gbps or so. But this asymmetry 
+    turned out to be a Windows issue, not a hardware or fiber connection problem (which could easily be proved by booting into Linux 
+    with the same hardware setup for comparison). There are some 
+    discussions out there on various Windows forums speculating about potential bugs in the Windows implementation of the TCP/IP stack. 
+    I experimented with all kinds of Windows driver settings for the Intel SFP28 E810-XXVDA2 NIC, to no avail. But once I was able 
+    to upgrade to the latest Windows 11 update (26H2) and the most recent Intel drivers (1.22.85.0, as of 17.09.2026, 
+    from the Intel website, not from Windows) everything works as expected! Up- and download speeds reach the 
+    full potential of my 25 gig network infrastructure and ISP plan.
+    <br>
+    So, I can safely say that a PCIe 4.0 x4 slot is sufficient to achieve a full 25Gbps up and down on one Intel E810-XXVDA2 ethernet port.
+    <br><br>
+    <img src="img/Speedtest25gig_up_down.png" alt="Speedtest 25gig up and down" width="50%">
 
     <br>
     <br>
